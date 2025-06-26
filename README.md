@@ -1,46 +1,69 @@
-# Getting Started with Create React App
+# My Portfolio Landing Page
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a production-ready, visually stunning two-page portfolio/product landing site built with React 19, TypeScript, Material-UI (MUI), and Google Maps integration.
 
-## Available Scripts
+## Features
+- **Dark theme** inspired by Blueprint.js
+- Responsive, modern UI with MUI components
+- Central hero section with interactive hexagonal logo and sub-company links
+- Google Map with marker and info window on Contact page
+- Smooth, satisfying hover effects
+- Fully responsive and accessible
 
-In the project directory, you can run:
+## Tech Stack
+- React 19 + TypeScript (Create React App)
+- Material-UI (MUI) for all UI components
+- React Router DOM for navigation
+- @react-google-maps/api for Google Maps
 
-### `npm start`
+## Project Structure
+```
+home-page/
+  src/
+    components/
+      Navbar.tsx
+      Footer.tsx
+      Layout.tsx
+    pages/
+      HomePage.tsx
+      ContactPage.tsx
+      SubCompanyAPage.tsx
+      SubCompanyBPage.tsx
+      SubCompanyCPage.tsx
+      SubCompanyDPage.tsx
+      SubCompanyEPage.tsx
+      SubCompanyFPage.tsx
+    App.tsx
+    index.tsx
+    ...
+  public/
+    my-logo.jpg (place your logo here)
+    ...
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Setup & Running
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Set your Google Maps API key:**
+   - Create a `.env` file in the root with:
+     ```
+     REACT_APP_Maps_API_KEY=your_google_maps_api_key
+     ```
+3. **Start the development server:**
+   ```bash
+   npm start
+   ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Build for Production
+```bash
+npm run build
+```
 
-### `npm test`
+## Customization
+- Replace `/public/my-logo.jpg` with your own hexagonal logo.
+- Edit sub-company pages in `src/pages/` as needed.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+© {year} My Portfolio. All rights reserved.
