@@ -8609,12 +8609,12 @@ const HomePage: React.FC = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           sx={{
             position: 'fixed',
-            bottom: 60,
+            bottom: 70,
             right: 20,
             zIndex: 100000,
-            backgroundColor: '#16A085',
+            backgroundColor: 'rgba(255, 255, 255, 0.23)',
             '&:hover': {
-              backgroundColor: '#138D75',
+              backgroundColor: 'rgba(181, 181, 181, 0.41)',
             },
             borderRadius: '50%',
             width: 30, // Adjusted width
