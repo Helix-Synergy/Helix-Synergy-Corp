@@ -967,8 +967,395 @@
 
 
 
+// import React, { useEffect, useRef } from 'react';
+// import { Box, Typography, TextField, Button, Paper, TextareaAutosize } from '@mui/material';
+// import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+// import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
+// import L from 'leaflet';
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import PhoneIcon from '@mui/icons-material/Phone';
+// import EmailIcon from '@mui/icons-material/Email';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+// // Fix default marker icon issue in Leaflet
+// import iconUrl from 'leaflet/dist/images/marker-icon.png';
+// import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+// gsap.registerPlugin(ScrollTrigger);
+
+// const DefaultIcon = L.icon({
+//   iconUrl,
+//   shadowUrl: iconShadow,
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+// });
+// L.Marker.prototype.options.icon = DefaultIcon;
+
+// const center: [number, number] = [17.4892 , 78.3930]; // Approximate coordinates for Manjeera Trinity, Hyderabad
+
+// const ContactPage: React.FC = () => {
+//   const pageContainerRef = useRef<HTMLDivElement | null>(null);
+//   const titleRef = useRef<HTMLDivElement | null>(null);
+//   const subtitleRef = useRef<HTMLDivElement | null>(null);
+//   const mapPaperRef = useRef<HTMLDivElement | null>(null);
+//   const formPaperRef = useRef<HTMLDivElement | null>(null);
+//   const mapMarkerRef = useRef<L.Marker | null>(null);
+//   const mapWrapperRef = useRef<HTMLDivElement | null>(null);
+
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, []);
+
+//   useEffect(() => {
+//     return () => {
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//       gsap.globalTimeline.clear();
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!pageContainerRef.current || !titleRef.current || !subtitleRef.current || !mapPaperRef.current || !formPaperRef.current) {
+//       return;
+//     }
+
+//     gsap.set([titleRef.current, subtitleRef.current, mapPaperRef.current, formPaperRef.current], {
+//       opacity: 0,
+//       y: 20,
+//     });
+
+//     const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 0.8 } });
+
+//     tl.to(pageContainerRef.current, {
+//       opacity: 1,
+//       duration: 0.5,
+//       ease: "power2.out"
+//     }, 0)
+//     .to(titleRef.current, { opacity: 1, y: 0 }, 0.2)
+//     .to(subtitleRef.current, { opacity: 1, y: 0 }, 0.3)
+//     .to(mapPaperRef.current, { opacity: 1, y: 0 }, 0.4)
+//     .to(formPaperRef.current, { opacity: 1, y: 0 }, 0.5);
+
+//   }, []);
+
+//   const handleMapMouseEnter = () => {
+//     if (mapMarkerRef.current) {
+//       mapMarkerRef.current.openPopup();
+//       gsap.to((mapMarkerRef.current as any)._icon, {
+//         scale: 1.2,
+//         duration: 0.3,
+//         yoyo: true,
+//         repeat: -1,
+//         ease: "power1.inOut",
+//         transformOrigin: "bottom center"
+//       });
+//     }
+//   };
+
+//   const handleMapMouseLeave = () => {
+//     if (mapMarkerRef.current) {
+//       mapMarkerRef.current.closePopup();
+//       gsap.killTweensOf((mapMarkerRef.current as any)._icon);
+//       gsap.to((mapMarkerRef.current as any)._icon, {
+//         scale: 1,
+//         duration: 0.3,
+//         transformOrigin: "bottom center"
+//       });
+//     }
+//   };
+
+//   return (
+//     <Box sx={{ position: 'relative', zIndex: 0 }}>
+//       {/* HomePage-style vibrant background */}
+//       <Box
+//         sx={{
+//           position: 'fixed',
+//           top: 0,
+//           left: 0,
+//           width: '100vw',
+//           height: '100vh',
+//           minHeight: '100vh',
+//           zIndex: -1,
+//           background: '#0A0A0A',
+//           backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//           filter: 'none',
+//           borderRadius: '0',
+//           pointerEvents: 'none',
+//         }}
+//       />
+//       {/* Main Contact Page Content */}
+//       <Box 
+//         ref={pageContainerRef}
+//         sx={{ 
+//           maxWidth: { xs: '90%', sm: 600, md: 700 },
+//           mx: 'auto', 
+//           color: '#F5F8FA', 
+//           py: { xs: 4, sm: 6, md: 8 },
+//           px: { xs: 2, sm: 0 },
+//           opacity: 0,
+//           minHeight: '100vh',
+//         }}
+//       >
+//         {/* Page Title */}
+//         <Typography ref={titleRef} variant="h3" sx={{ mb: 2, fontWeight: 700, color: '#F5F8FA', textAlign: 'start' }}>
+//           Contact Us
+//         </Typography>
+//         {/* Page Subtitle */}
+//         <Typography ref={subtitleRef} variant="h6" sx={{ mb: 4, color: '#A7B6C2', textAlign: 'start' }}>
+//           Get in touch or find us on the map below.
+//         </Typography>
+//         {/* Map Section */}
+//         <Paper 
+//           elevation={4} 
+//           ref={mapPaperRef} 
+//           sx={{ 
+//             background: 'rgba(35, 43, 51, 0.6)',
+//             backdropFilter: 'blur(10px) saturate(180%)',
+//             WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+//             mb: 4, 
+//             p: { xs: 1, sm: 2 }, 
+//             borderRadius: 6,
+//             border: '1px solid rgba(255, 255, 255, 0.1)',
+//             height: 'fit-content',
+//           }}
+//         >
+//           {/* NEW: Wrapper div for hover events */}
+//           <Box
+//             ref={mapWrapperRef}
+//             onMouseEnter={handleMapMouseEnter}
+//             onMouseLeave={handleMapMouseLeave}
+//             sx={{
+//                 width: '100%',
+//                 height: '350px',
+//                 borderRadius: 'inherit',
+//                 overflow: 'hidden',
+//                 cursor: 'pointer',
+//             }}
+//           >
+//             <MapContainer
+//               center={center}
+//               zoom={15}
+//               style={{
+//                 width: '100%',
+//                 height: '100%',
+//                 borderRadius: 'inherit',
+//                 overflow: 'hidden',
+//               }}
+//               scrollWheelZoom={false}
+//             >
+//               <TileLayer
+//                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//               />
+//               <Marker
+//                 position={center}
+//                 ref={mapMarkerRef}
+//               >
+//                 <Popup>
+//                   <strong>Helix Synergy Crop, </strong><br />
+//                   #402, 4<sup>th</sup> floor, Manjeera Trinity Corporate, <br />
+//                   KPHB, Hyderabad, Telangana 500072, India
+//                 </Popup>
+//               </Marker>
+//             </MapContainer>
+//           </Box>
+//         </Paper>
+
+//         {/* Contact Form Section */}
+//         <Paper 
+//           elevation={2} 
+//           ref={formPaperRef} 
+//           sx={{ 
+//             background: 'rgba(35, 43, 51, 0.6)',
+//             backdropFilter: 'blur(10px) saturate(180%)',
+//             WebkitBackdropFilter: 'blur(10px) saturate(180%)',
+//             p: { xs: 2, sm: 3 }, 
+//             borderRadius: 6,
+//             border: '1px solid rgba(255, 255, 255, 0.1)',
+//           }}
+//         >
+//           <Typography variant="h6" sx={{ mb: 2, color: '#F5F8FA' }}>
+//             Send us a Message
+//           </Typography>
+//           <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
+//             <TextField 
+//               label="Name" 
+//               variant="filled" 
+//               fullWidth
+//               InputProps={{ style: { color: '#F5F8FA' } }} 
+//               InputLabelProps={{ style: { color: '#A7B6C2' } }} 
+//               sx={{ 
+//                 background: 'rgba(255,255,255,0.05)', 
+//                 borderRadius: '10px',
+//                 '& .MuiFilledInput-root': {
+//                   borderRadius: '10px',
+//                   '&:before': { borderBottom: 'none' },
+//                   '&:after': { borderBottom: 'none' },
+//                   '&:hover:not(.Mui-disabled):before': { borderBottom: 'none' },
+//                 },
+//               }}
+//             />
+//             <TextField 
+//               label="Email" 
+//               variant="filled" 
+//               fullWidth 
+//               InputProps={{ style: { color: '#F5F8FA' } }} 
+//               InputLabelProps={{ style: { color: '#A7B6C2' } }} 
+//               sx={{ 
+//                 background: 'rgba(255,255,255,0.05)', 
+//                 borderRadius: '10px',
+//                 '& .MuiFilledInput-root': {
+//                   borderRadius: '10px',
+//                   '&:before': { borderBottom: 'none' },
+//                   '&:after': { borderBottom: 'none' },
+//                   '&:hover:not(.Mui-disabled):before': { borderBottom: 'none' },
+//                 },
+//               }}
+//             />
+//             <TextField 
+//               label="Message" 
+//               variant="filled" 
+//               multiline 
+//               rows={4} 
+//               fullWidth 
+//               InputProps={{ style: { color: '#F5F8FA' } }} 
+//               InputLabelProps={{ style: { color: '#A7B6C2' } }} 
+//               sx={{ 
+//                 background: 'rgba(255,255,255,0.05)', 
+//                 borderRadius: '10px',
+//                 '& .MuiFilledInput-root': {
+//                   borderRadius: '10px',
+//                   '&:before': { borderBottom: 'none' },
+//                   '&:after': { borderBottom: 'none' },
+//                   '&:hover:not(.Mui-disabled):before': { borderBottom: 'none' },
+//                 },
+//               }}
+//             />
+//             <Button 
+//               variant="contained" 
+//               color="primary" 
+//               sx={{ 
+//                 alignSelf: 'flex-end', 
+//                 mt: 1, 
+//                 background: 'transparent',
+//                 border: '2px solid #F5F8FA',
+//                 color: '#F5F8FA',
+//                 boxShadow: 'none',
+//                 borderRadius: '10px',
+//                 padding: '10px 30px',
+//                 textTransform: 'uppercase',
+//                 transition: '0.3s ease-in-out',
+//                 '&:hover': { 
+//                   background: 'rgba(255, 255, 255, 0.08)',
+//                   borderColor: '#48AFF0',
+//                   boxShadow: '0 0 15px rgba(72, 175, 240, 0.4)',
+//                 },
+//               }}
+//             >
+//               Send
+//             </Button>
+//           </Box>
+//         </Paper>
+
+//         {/* UPDATED: Dedicated Contact Details Section */}
+//         <Paper 
+//           elevation={6}
+//           sx={{ 
+//             background: 'rgba(35, 43, 51, 0.85)',
+//             backdropFilter: 'blur(16px) saturate(180%)',
+//             WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+//             mt: 4,
+//             p: { xs: 3, sm: 4 },
+//             borderRadius: 6,
+//             border: '1.5px solid rgba(72, 175, 240, 0.18)',
+//             textAlign: 'start',
+//             boxShadow: '0px 8px 32px rgba(72,175,240,0.10)',
+//             position: 'relative',
+//             overflow: 'hidden',
+//           }}
+//         >
+//           {/* Accent bar */}
+//           <Box sx={{
+//             width: '100%',
+//             height: 5,
+//             background: 'linear-gradient(90deg, #48AFF0 0%, #A259FF 100%)',
+//             borderRadius: 3,
+//             ml: 0,
+//             mb: 2,
+//           }} />
+//           <Typography 
+//             variant="h5"
+//             sx={{ 
+//               mb: { xs: 2.5, sm: 3 }, 
+//               fontWeight: 700,
+//               color: '#F5F8FA',
+//               letterSpacing: '0.07em',
+//               textShadow: '0 2px 8px rgba(72,175,240,0.10)',
+//               display: 'flex',
+//               alignItems: 'center',
+//               justifyContent: 'flex-start',
+//               gap: 1.5,
+//             }}
+//           >
+//             <LocationOnIcon sx={{ color: '#48AFF0', fontSize: 32, verticalAlign: 'middle' }} />
+//             Our Contact Details
+//           </Typography>
+//           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2, mb: 1 }}>
+//             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+//               <PhoneIcon sx={{ color: '#48AFF0', fontSize: 22 }} />
+//               <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500 }}>
+//                 <a href="tel:+919492117897" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
+//                   onMouseOver={e => (e.currentTarget.style.color = '#A259FF')}
+//                   onMouseOut={e => (e.currentTarget.style.color = '#48AFF0')}
+//                 >
+//                   +91 94921 17897
+//                 </a>
+//               </Typography>
+//             </Box>
+//             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+//               <EmailIcon sx={{ color: '#48AFF0', fontSize: 22 }} />
+//               <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500 }}>
+//                 <a href="mailto:contact@helixsynergycorp.org" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
+//                   onMouseOver={e => (e.currentTarget.style.color = '#A259FF')}
+//                   onMouseOut={e => (e.currentTarget.style.color = '#48AFF0')}
+//                 >
+//                   contact@helixsynergycorp.org
+//                 </a>
+//               </Typography>
+//             </Box>
+//             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mt: 1 }}>
+//               <LocationOnIcon sx={{ color: '#48AFF0', fontSize: 32, mt: '2px' }} />
+//               <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500, textAlign: 'left' }}>
+//               <Typography variant="body1" sx={{ color: '#E0E8EF', fontSize:'24px', textAlign: 'left' }}>
+//               <strong > Helix Synergy Crop, </strong><br/>
+//               </Typography>
+//                #402, 4<sup>th</sup> floor, Manjeera Trinity Corporate, <br />
+//                KPHB, Hyderabad, Telangana 500072, India
+//               </Typography>
+//             </Box>
+//           </Box>
+//         </Paper>
+
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default ContactPage;
+
+
+
+
+
+
+
 import React, { useEffect, useRef } from 'react';
-import { Box, Typography, TextField, Button, Paper } from '@mui/material';
+import { Box, Typography, TextField, Button, Paper, TextareaAutosize } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet CSS is imported
 import L from 'leaflet';
@@ -992,7 +1379,7 @@ const DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const center: [number, number] = [17.4475, 78.3752]; // Approximate coordinates for Manjeera Trinity, Hyderabad
+const center: [number, number] = [17.4892, 78.3930]; // Approximate coordinates for Manjeera Trinity, Hyderabad
 
 const ContactPage: React.FC = () => {
   const pageContainerRef = useRef<HTMLDivElement | null>(null);
@@ -1086,15 +1473,22 @@ const ContactPage: React.FC = () => {
           filter: 'none',
           borderRadius: '0',
           pointerEvents: 'none',
+          // Added subtle background position animation
+          backgroundSize: '200% 200%',
+          animation: 'backgroundPan 60s linear infinite alternate',
+          '@keyframes backgroundPan': {
+            '0%': { backgroundPosition: '0% 0%' },
+            '100%': { backgroundPosition: '100% 100%' },
+          },
         }}
       />
       {/* Main Contact Page Content */}
-      <Box 
+      <Box
         ref={pageContainerRef}
-        sx={{ 
-          maxWidth: { xs: '90%', sm: 600, md: 700 },
-          mx: 'auto', 
-          color: '#F5F8FA', 
+        sx={{
+          maxWidth: { xs: '95%', sm: 600, md: 700 }, // Increased width for mobile (xs)
+          mx: 'auto',
+          color: '#F5F8FA',
           py: { xs: 4, sm: 6, md: 8 },
           px: { xs: 2, sm: 0 },
           opacity: 0,
@@ -1110,18 +1504,24 @@ const ContactPage: React.FC = () => {
           Get in touch or find us on the map below.
         </Typography>
         {/* Map Section */}
-        <Paper 
-          elevation={4} 
-          ref={mapPaperRef} 
-          sx={{ 
+        <Paper
+          elevation={4}
+          ref={mapPaperRef}
+          sx={{
             background: 'rgba(35, 43, 51, 0.6)',
             backdropFilter: 'blur(10px) saturate(180%)',
             WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-            mb: 4, 
-            p: { xs: 1, sm: 2 }, 
-            borderRadius: 6,
+            mb: 4,
+            p: { xs: 1, sm: 2 },
+            borderRadius: '20px', // Increased border-radius
             border: '1px solid rgba(255, 255, 255, 0.1)',
             height: 'fit-content',
+            // Added subtle hover effect for the map container
+            transition: 'transform 0.3s ease-out, box-shadow 0.3s ease-out',
+            '&:hover': {
+              transform: 'translateY(-5px)',
+              boxShadow: '0px 12px 24px rgba(0, 255, 255, 0.2), 0px 0px 15px rgba(255, 255, 0, 0.2)',
+            },
           }}
         >
           {/* NEW: Wrapper div for hover events */}
@@ -1131,7 +1531,8 @@ const ContactPage: React.FC = () => {
             onMouseLeave={handleMapMouseLeave}
             sx={{
                 width: '100%',
-                height: '350px',
+                // Adjusted height for responsiveness
+                height: { xs: '250px', sm: '300px', md: '350px' },
                 borderRadius: 'inherit',
                 overflow: 'hidden',
                 cursor: 'pointer',
@@ -1157,9 +1558,9 @@ const ContactPage: React.FC = () => {
                 ref={mapMarkerRef}
               >
                 <Popup>
-                  <strong>Manjeera Trinity</strong><br />
-                  KPHB Phase 3, Kukatpally Housing Board Colony<br />
-                  Hyderabad, Telangana 500072, India
+                  <strong>Helix Synergy Crop, </strong><br />
+                  #402, 4<sup>th</sup> floor, Manjeera Trinity Corporate, <br />
+                  KPHB, Hyderabad, Telangana 500072, India
                 </Popup>
               </Marker>
             </MapContainer>
@@ -1167,30 +1568,36 @@ const ContactPage: React.FC = () => {
         </Paper>
 
         {/* Contact Form Section */}
-        <Paper 
-          elevation={2} 
-          ref={formPaperRef} 
-          sx={{ 
+        <Paper
+          elevation={2}
+          ref={formPaperRef}
+          sx={{
             background: 'rgba(35, 43, 51, 0.6)',
             backdropFilter: 'blur(10px) saturate(180%)',
             WebkitBackdropFilter: 'blur(10px) saturate(180%)',
-            p: { xs: 2, sm: 3 }, 
-            borderRadius: 6,
+            p: { xs: 2, sm: 3 },
+            borderRadius: '20px', // Increased border-radius
             border: '1px solid rgba(255, 255, 255, 0.1)',
+            // Added subtle hover effect for the form container
+            transition: 'transform 0.3s ease-out, box-shadow 0.3s ease-out',
+            '&:hover': {
+              transform: 'translateY(-5px)',
+              boxShadow: '0px 12px 24px rgba(0, 255, 255, 0.2), 0px 0px 15px rgba(255, 255, 0, 0.2)',
+            },
           }}
         >
           <Typography variant="h6" sx={{ mb: 2, color: '#F5F8FA' }}>
             Send us a Message
           </Typography>
           <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1.5, sm: 2 } }}>
-            <TextField 
-              label="Name" 
-              variant="filled" 
+            <TextField
+              label="Name"
+              variant="filled"
               fullWidth
-              InputProps={{ style: { color: '#F5F8FA' } }} 
-              InputLabelProps={{ style: { color: '#A7B6C2' } }} 
-              sx={{ 
-                background: 'rgba(255,255,255,0.05)', 
+              InputProps={{ style: { color: '#F5F8FA' } }}
+              InputLabelProps={{ style: { color: '#A7B6C2' } }}
+              sx={{
+                background: 'rgba(255,255,255,0.05)',
                 borderRadius: '10px',
                 '& .MuiFilledInput-root': {
                   borderRadius: '10px',
@@ -1200,14 +1607,14 @@ const ContactPage: React.FC = () => {
                 },
               }}
             />
-            <TextField 
-              label="Email" 
-              variant="filled" 
-              fullWidth 
-              InputProps={{ style: { color: '#F5F8FA' } }} 
-              InputLabelProps={{ style: { color: '#A7B6C2' } }} 
-              sx={{ 
-                background: 'rgba(255,255,255,0.05)', 
+            <TextField
+              label="Email"
+              variant="filled"
+              fullWidth
+              InputProps={{ style: { color: '#F5F8FA' } }}
+              InputLabelProps={{ style: { color: '#A7B6C2' } }}
+              sx={{
+                background: 'rgba(255,255,255,0.05)',
                 borderRadius: '10px',
                 '& .MuiFilledInput-root': {
                   borderRadius: '10px',
@@ -1217,16 +1624,16 @@ const ContactPage: React.FC = () => {
                 },
               }}
             />
-            <TextField 
-              label="Message" 
-              variant="filled" 
-              multiline 
-              rows={4} 
-              fullWidth 
-              InputProps={{ style: { color: '#F5F8FA' } }} 
-              InputLabelProps={{ style: { color: '#A7B6C2' } }} 
-              sx={{ 
-                background: 'rgba(255,255,255,0.05)', 
+            <TextField
+              label="Message"
+              variant="filled"
+              multiline
+              rows={4}
+              fullWidth
+              InputProps={{ style: { color: '#F5F8FA' } }}
+              InputLabelProps={{ style: { color: '#A7B6C2' } }}
+              sx={{
+                background: 'rgba(255,255,255,0.05)',
                 borderRadius: '10px',
                 '& .MuiFilledInput-root': {
                   borderRadius: '10px',
@@ -1236,23 +1643,23 @@ const ContactPage: React.FC = () => {
                 },
               }}
             />
-            <Button 
-              variant="contained" 
-              color="primary" 
-              sx={{ 
-                alignSelf: 'flex-end', 
-                mt: 1, 
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                alignSelf: 'flex-end',
+                mt: 1,
                 background: 'transparent',
-                border: '2px solid #F5F8FA',
+                border: '2px solid #48AFF0', // Changed border color for consistency
                 color: '#F5F8FA',
                 boxShadow: 'none',
                 borderRadius: '10px',
                 padding: '10px 30px',
                 textTransform: 'uppercase',
                 transition: '0.3s ease-in-out',
-                '&:hover': { 
+                '&:hover': {
                   background: 'rgba(255, 255, 255, 0.08)',
-                  borderColor: '#48AFF0',
+                  borderColor: '#A259FF', // Changed hover border color
                   boxShadow: '0 0 15px rgba(72, 175, 240, 0.4)',
                 },
               }}
@@ -1263,20 +1670,26 @@ const ContactPage: React.FC = () => {
         </Paper>
 
         {/* UPDATED: Dedicated Contact Details Section */}
-        <Paper 
+        <Paper
           elevation={6}
-          sx={{ 
+          sx={{
             background: 'rgba(35, 43, 51, 0.85)',
             backdropFilter: 'blur(16px) saturate(180%)',
             WebkitBackdropFilter: 'blur(16px) saturate(180%)',
             mt: 4,
             p: { xs: 3, sm: 4 },
-            borderRadius: 6,
+            borderRadius: '20px', // Increased border-radius
             border: '1.5px solid rgba(72, 175, 240, 0.18)',
             textAlign: 'start',
             boxShadow: '0px 8px 32px rgba(72,175,240,0.10)',
             position: 'relative',
             overflow: 'hidden',
+            // Added subtle hover effect for the contact details container
+            transition: 'transform 0.3s ease-out, box-shadow 0.3s ease-out',
+            '&:hover': {
+              transform: 'translateY(-5px)',
+              boxShadow: '0px 12px 24px rgba(72, 175, 240, 0.2), 0px 0px 15px rgba(162, 89, 255, 0.2)',
+            },
           }}
         >
           {/* Accent bar */}
@@ -1288,10 +1701,10 @@ const ContactPage: React.FC = () => {
             ml: 0,
             mb: 2,
           }} />
-          <Typography 
+          <Typography
             variant="h5"
-            sx={{ 
-              mb: { xs: 2.5, sm: 3 }, 
+            sx={{
+              mb: { xs: 2.5, sm: 3 },
               fontWeight: 700,
               color: '#F5F8FA',
               letterSpacing: '0.07em',
@@ -1300,6 +1713,7 @@ const ContactPage: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'flex-start',
               gap: 1.5,
+              fontSize: { xs: '1.4rem', sm: '1.5rem', md: '1.5rem' }, // Reduced font size for mobile
             }}
           >
             <LocationOnIcon sx={{ color: '#48AFF0', fontSize: 32, verticalAlign: 'middle' }} />
@@ -1308,32 +1722,34 @@ const ContactPage: React.FC = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2, mb: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <PhoneIcon sx={{ color: '#48AFF0', fontSize: 22 }} />
-              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500 }}>
-                <a href="tel:+919876543210" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
+              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500, fontSize: { xs: '0.9rem', sm: '1rem' } }}> {/* Reduced font size for mobile */}
+                <a href="tel:+919492117897" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
                   onMouseOver={e => (e.currentTarget.style.color = '#A259FF')}
                   onMouseOut={e => (e.currentTarget.style.color = '#48AFF0')}
                 >
-                  +91 98765 43210
+                  +91 94921 17897
                 </a>
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <EmailIcon sx={{ color: '#48AFF0', fontSize: 22 }} />
-              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500 }}>
-                <a href="mailto:contact@yourcompany.com" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
+              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500, fontSize: { xs: '0.9rem', sm: '1rem' } }}> {/* Reduced font size for mobile */}
+                <a href="mailto:contact@helixsynergycorp.org" style={{ color: '#48AFF0', textDecoration: 'none', fontWeight: 600, transition: 'color 0.2s' }}
                   onMouseOver={e => (e.currentTarget.style.color = '#A259FF')}
                   onMouseOut={e => (e.currentTarget.style.color = '#48AFF0')}
                 >
-                  contact@yourcompany.com
+                  contact@helixsynergycorp.org
                 </a>
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mt: 1 }}>
-              <LocationOnIcon sx={{ color: '#48AFF0', fontSize: 22, mt: '2px' }} />
-              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500, textAlign: 'left' }}>
-                Manjeera Trinity, KPHB Phase 3,<br />
-                Kukatpally Housing Board Colony,<br />
-                Hyderabad, Telangana 500072, India
+              <LocationOnIcon sx={{ color: '#48AFF0', fontSize: 32, mt: '2px' }} />
+              <Typography variant="body1" sx={{ color: '#E0E8EF', fontWeight: 500, textAlign: 'left', fontSize: { xs: '0.9rem', sm: '1rem' } }}> {/* Reduced font size for mobile */}
+              <Typography variant="body1" sx={{ color: '#E0E8EF', fontSize:{ xs: '1.1rem', sm: '1.5rem' }, textAlign: 'left' }}> {/* Reduced font size for mobile */}
+              <strong > Helix Synergy Crop, </strong><br/>
+              </Typography>
+                #402, 4<sup>th</sup> floor, Manjeera Trinity Corporate, <br />
+                KPHB, Hyderabad, Telangana 500072, India
               </Typography>
             </Box>
           </Box>

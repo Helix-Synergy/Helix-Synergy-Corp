@@ -40,7 +40,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import GitHubIcon from '@mui/icons-material/GitHub';
+// import GitHubIcon from '@mui/icons-material/GitHub';
 import RedditIcon from '@mui/icons-material/Reddit';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 // NOTE: SnapchatIcon is typically NOT available in @mui/icons-material.
@@ -100,7 +100,7 @@ const Footer: React.FC = () => (
       <IconButton
         aria-label="Twitter"
         color="inherit"
-        href="https://www.twitter.com/helixsynergycorp" // REPLACE WITH ACTUAL LINK
+        href="https://x.com/SynergyConfex" // REPLACE WITH ACTUAL LINK
         target="_blank"
         rel="noopener noreferrer"
         sx={{ '&:hover': { color: '#1DA1F2' } }}
@@ -130,14 +130,14 @@ const Footer: React.FC = () => (
       <IconButton
         aria-label="YouTube"
         color="inherit"
-        href="https://www.youtube.com/@helixsynergycorp" // REPLACE WITH ACTUAL LINK
+        href="https://www.youtube.com/@Synergy_Confex" // REPLACE WITH ACTUAL LINK
         target="_blank"
         rel="noopener noreferrer"
         sx={{ '&:hover': { color: '#FF0000' } }}
       >
         <YouTubeIcon />
       </IconButton>
-      <IconButton
+      {/* <IconButton
         aria-label="GitHub"
         color="inherit"
         href="https://github.com/helixsynergycorp" // REPLACE WITH ACTUAL LINK
@@ -146,11 +146,11 @@ const Footer: React.FC = () => (
         sx={{ '&:hover': { color: '#6e5494' } }}
       >
         <GitHubIcon />
-      </IconButton>
+      </IconButton> */}
       <IconButton
         aria-label="Reddit"
         color="inherit"
-        href="https://www.reddit.com/user/helixsynergycorp" // REPLACE WITH ACTUAL LINK
+        href="https://www.reddit.com/user/Any_Bid_8268/" // REPLACE WITH ACTUAL LINK
         target="_blank"
         rel="noopener noreferrer"
         sx={{ '&:hover': { color: '#FF4500' } }}
@@ -160,7 +160,7 @@ const Footer: React.FC = () => (
       <IconButton
         aria-label="Pinterest"
         color="inherit"
-        href="https://www.pinterest.com/helixsynergycorp" // REPLACE WITH ACTUAL LINK
+        href="https://www.pinterest.com/hellosynergyconfex9/" // REPLACE WITH ACTUAL LINK
         target="_blank"
         rel="noopener noreferrer"
         sx={{ '&:hover': { color: '#E60023' } }}

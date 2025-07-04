@@ -8032,15 +8032,6649 @@
 
 
 
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme } from '@mui/material';
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380; // Increased base radius for larger spread
+// const BASE_BLUR_BG_SIZE = 450; // Increased size for the main logo blur background
+// const BASE_LOGO_SIZE = 300; // Increased logo size
+// const BASE_SUB_COMPANY_SIZE = 160; // Increased size for sub-company circles
+// const BASE_SUB_COMPANY_FONT_SIZE = '1.3rem'; // Adjusted font size for larger circles
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll' },
+//   { label: 'DIGIGRO', to: '/digigro' },
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%', // Modernized to 20% border radius
+//   background: 'rgba(255, 255, 255, 0.18)', // Subtle white background
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%', // Moved up slightly
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1, // Will be set to 0 by GSAP initially
+//   filter: 'blur(10px)', // Will be unblurred by GSAP
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%', // Modernized to 20% border radius
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%', // Moved up slightly
+//   transform: 'translate(-50%, -50%)', // Logo is centered initially
+//   opacity: 1, // Will be set to 0 by GSAP initially
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   // Adjusted padding-top to pull content up within the pinned area
+//   paddingTop: '0vh', // Adjust as needed, was '10vh' implicitly
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0, // Initial opacity for animation
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null); // NEW: Ref for the continuous pulse
+
+//   // Responsive values for radius based on screen size
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   // This useEffect handles page scroll-to-top and container dimension updates
+//   useEffect(() => {
+//     // --- Scroll to top instantly on mount or refresh ---
+//     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//     };
+//   }, []); // Empty dependency array means it runs once on mount
+
+
+//   // This useEffect handles the entry animation for logo and blur background
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     // Ensure all previous GSAP animations on these elements are killed
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+
+//     // Initial state for the entry animation: invisible and scaled down
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 }); // Ensure initial rotation is reset
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         // Once the entry animation is complete, start the continuous clockwise rotation
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         // NEW: Start the continuous pulse animation after entry is complete
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], { // Pop up
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, { // Fast anti-clockwise rotation
+//         rotate: -720, // Two full rotations anti-clockwise
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4"); // Overlap with pop-up slightly
+
+//     // Cleanup for this specific entry animation
+//     return () => {
+//       entryAnimationTl.kill(); // Kill the entry animation timeline on unmount
+//     };
+//   }, []); // Run only once on mount (which happens on refresh/re-route)
+
+
+//   // Calculate center dynamically based on actual container dimensions
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   // Store initial calculated positions for the peripheral elements
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   // This useEffect handles the main page animations (scroll-triggered, continuous rotations)
+//   useEffect(() => {
+//     // CRITICAL CLEANUP FOR REACT SPAs
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Kill previous instances of these specific tweens
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     // NEW: Kill previous pulse tween
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+
+//     // Ensure all referenced DOM elements are available for main animations
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     // --- Initial Continuous Logo Rotation (always active until scroll animation) ---
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360', // Add 360 degrees to current rotation for continuous spin
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation
+//     });
+
+//     // NEW: Continuous Logo Pulse/Bubbling Effect
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2, // Quick scale up
+//       yoyo: true, // Scale up and then back down
+//       repeat: -1, // Repeat indefinitely
+//       ease: "power1.inOut",
+//       delay: 0.5, // Initial delay before first pulse after entry anim completes
+//       repeatDelay: 2.8, // Delay between pulses (total cycle time 0.2 + 0.2 + 2.8 = 3.2s)
+//       paused: true, // Start paused, played by entry animation onComplete
+//     });
+
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     // --- Main Scroll-Triggered Animation Timeline ---
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500', // Extend the scroll distance for animation
+//         scrub: 1, // Smoothly link animation to scroll position
+//         pin: true, // Pin the hero section during animation
+//         onEnter: () => {
+//           if (initialLogoRotationTweenRef.current) {
+//             initialLogoRotationTweenRef.current.pause(); // Pause initial rotation when entering scroll trigger
+//           }
+//           // NEW: Pause pulse when entering scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.pause();
+//           }
+//         },
+//         onLeave: () => {
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.play(); // Play final rotation when leaving scroll trigger
+//           }
+//           // NEW: Resume pulse when leaving scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//           }
+//         },
+//         onEnterBack: () => {
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.pause(); // Pause final rotation when scrolling back into trigger
+//           }
+//           // NEW: Pause pulse when re-entering scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.pause();
+//           }
+//         },
+//         onLeaveBack: () => {
+//           if (initialLogoRotationTweenRef.current) {
+//             initialLogoRotationTweenRef.current.play(); // Resume initial rotation when scrolling back out
+//           }
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.kill(); // Kill final rotation if we scroll back to top
+//             finalLogoRotationTweenRef.current = null;
+//           }
+//           // NEW: Resume pulse when leaving scroll trigger backwards
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//           }
+//         },
+//       },
+//     });
+
+//     // --- Animations within the scroll-triggered timeline ---
+//     // Logo stops rotating and blur fades out
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0, // Stop rotation
+//         duration: 0.8, // Slightly longer duration for smoother stop
+//         ease: 'power2.out',
+//       },
+//       0
+//     ) // Start at the beginning of the timeline
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)', // Unblur
+//           opacity: 0, // Fade out
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       ) // Start at the beginning of the timeline
+//       // Lines appear
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0, // Slower fade in for lines
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       ); // Start slightly after logo/blur animation begins
+
+//     // --- GRAVITATIONAL PULL ANIMATION ADDITION ---
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       const currentSubCompanySize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_SIZE * 0.6 :
+//                                      theme.breakpoints.down('md') ? BASE_SUB_COMPANY_SIZE * 0.8 :
+//                                      BASE_SUB_COMPANY_SIZE;
+//       const offset = currentSubCompanySize / 2;
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+//     // --- END GRAVITATIONAL PULL ANIMATION ADDITION ---
+
+
+//     // --- Final Continuous Logo Rotation (starts after scroll animation ends) ---
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360', // Continue from current rotation
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause(); // Start paused
+
+//     // --- Scroll to Top Button Animation ---
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         // end: 'bottom 100%',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh(); // Recalculate all ScrollTrigger positions
+
+//     // --- Cleanup function for the main animations useEffect ---
+//     return () => {
+//       tl.kill(); // Kill the main timeline
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) { // NEW: Kill pulse tween on unmount
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]); // Re-run if radius or container dimensions change
+
+//   return (
+//     <>
+//       {/* Main Page Content - always visible */}
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         {/* This Box now serves as the solid dark background for the entire page */}
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%), /* Bright White */
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),   /* Vibrant Magenta */
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),   /* Vibrant Cyan */
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)    /* Vibrant Yellow */
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         {/* Text elements - now outside HeroContainer, scroll naturally */}
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' }, // Moved up slightly
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             {/* Logo and Blur Background - their animation is now managed by the entryAnimationTl */}
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6" // Dashed line effect
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanySize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_SIZE;
+//                 const offset = currentSubCompanySize / 2;
+
+//                 return (
+//                   <Link
+//                     key={i}
+//                     component={RouterLink}
+//                     to={SUB_COMPANIES[i].to}
+//                     target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'} // Open external links in new tab
+//                     sx={{
+//                       position: 'absolute',
+//                       width: currentSubCompanySize,
+//                       height: currentSubCompanySize,
+//                       borderRadius: 12, // Modernized border radius
+//                       background: '#202B33',
+//                       color: '#F5F8FA',
+//                       display: 'flex',
+//                       alignItems: 'center',
+//                       justifyContent: 'center',
+//                       fontWeight: 600,
+//                       fontSize: theme.breakpoints.down('sm') ? '0.9rem' : BASE_SUB_COMPANY_FONT_SIZE,
+//                       textAlign: 'center',
+//                       padding: '0 8px',
+//                       boxSizing: 'border-box',
+//                       boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+//                       cursor: 'pointer',
+//                       border: `2px solid #394B59`, // FIX: Changed to backticks
+//                       transition: 'background 0.3s, color 0.3s, box-shadow 0.3s, border 0.3s',
+//                       zIndex: 2,
+//                       left: pos.x - offset,
+//                       top: pos.y - offset,
+//                       textDecoration: 'none',
+//                       opacity: 0, // Initial opacity for GSAP animation (controlled by main timeline)
+//                       transform: 'translateY(20px)', // Initial position for GSAP animation (controlled by main timeline)
+//                       '&:hover': {
+//                         background: '#30404D',
+//                         borderColor: '#48AFF0', // Highlight border
+//                         color: '#48AFF0', // Highlight text
+//                         boxShadow: '0 4px 24px rgba(72, 175, 240, 0.4)', // Vibrant shadow on hover
+//                       },
+//                     }}
+//                   >
+//                     {SUB_COMPANIES[i].label}
+//                   </Link>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         {/* Scroll to top button */}
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30, // Adjusted width
+//             height: 30, // Adjusted height
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0, // Initially hidden, controlled by ScrollTrigger
+//             pointerEvents: 'none', // Initially no pointer events, controlled by ScrollTrigger
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme } from '@mui/material';
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png'; // Example filename
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380; // Increased base radius for larger spread
+// const BASE_BLUR_BG_SIZE = 450; // Increased size for the main logo blur background
+// const BASE_LOGO_SIZE = 300; // Increased logo size
+// const BASE_SUB_COMPANY_SIZE = 160; // Increased size for sub-company circles
+// // Removed BASE_SUB_COMPANY_FONT_SIZE as we are using images, not text
+
+// // --- UPDATED: Add 'image' property to each object in SUB_COMPANIES ---
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: helixESchrollLogo },
+//   { label: 'DIGIGRO', to: '/digigro', image: digigroLogo },
+// ];
+// // --- END UPDATED SUB_COMPANIES ---
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%', // Modernized to 20% border radius
+//   background: 'rgba(255, 255, 255, 0.18)', // Subtle white background
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%', // Moved up slightly
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1, // Will be set to 0 by GSAP initially
+//   filter: 'blur(10px)', // Will be unblurred by GSAP
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%', // Modernized to 20% border radius
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%', // Moved up slightly
+//   transform: 'translate(-50%, -50%)', // Logo is centered initially
+//   opacity: 1, // Will be set to 0 by GSAP initially
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   // Adjusted padding-top to pull content up within the pinned area
+//   paddingTop: '0vh', // Adjust as needed, was '10vh' implicitly
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0, // Initial opacity for animation
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null); // NEW: Ref for the continuous pulse
+
+//   // Responsive values for radius based on screen size
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   // --- START NEW/MODIFIED: Scroll to top and dimension updates ---
+//   useEffect(() => {
+//     // Force scroll to top instantly on mount/refresh
+//     // Use setTimeout with 0 delay to ensure it runs after browser potentially restores scroll
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }); // Use 'instant' for immediate reset
+//       // Also ensure ScrollTrigger knows to refresh its positions after scroll reset
+//       ScrollTrigger.refresh(true); // 'true' param will re-evaluate all start/end positions
+//     };
+
+//     scrollToTop(); // Run once on mount
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     // Add an event listener for `beforeunload` to reset scroll on refresh/close
+//     // This is a safety measure, though `scrollToTop` on mount is usually sufficient.
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []); // Empty dependency array means it runs once on mount
+//   // --- END NEW/MODIFIED ---
+
+
+//   // This useEffect handles the entry animation for logo and blur background
+//   useEffect(() => {
+//     // Only run this effect if the elements are available
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     // Ensure all previous GSAP animations on these elements are killed
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+
+//     // Initial state for the entry animation: invisible and scaled down
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 }); // Ensure initial rotation is reset
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         // Once the entry animation is complete, start the continuous clockwise rotation
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         // NEW: Start the continuous pulse animation after entry is complete
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], { // Pop up
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, { // Fast anti-clockwise rotation
+//         rotate: -720, // Two full rotations anti-clockwise
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4"); // Overlap with pop-up slightly
+
+//     // Cleanup for this specific entry animation
+//     return () => {
+//       entryAnimationTl.kill(); // Kill the entry animation timeline on unmount
+//     };
+//   }, []); // Run only once on mount (which happens on refresh/re-route)
+
+
+//   // Calculate center dynamically based on actual container dimensions
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   // Store initial calculated positions for the peripheral elements
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   // This useEffect handles the main page animations (scroll-triggered, continuous rotations)
+//   useEffect(() => {
+//     // CRITICAL CLEANUP FOR REACT SPAs
+//     // Ensure all ScrollTriggers are killed BEFORE recreating them
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Kill previous instances of these specific tweens
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     // NEW: Kill previous pulse tween
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+
+//     // Ensure all referenced DOM elements are available for main animations
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     // --- Initial Continuous Logo Rotation (always active until scroll animation) ---
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360', // Add 360 degrees to current rotation for continuous spin
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation
+//     });
+
+//     // NEW: Continuous Logo Pulse/Bubbling Effect
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2, // Quick scale up
+//       yoyo: true, // Scale up and then back down
+//       repeat: -1, // Repeat indefinitely
+//       ease: "power1.inOut",
+//       delay: 0.5, // Initial delay before first pulse after entry anim completes
+//       repeatDelay: 2.8, // Delay between pulses (total cycle time 0.2 + 0.2 + 2.8 = 3.2s)
+//       paused: true, // Start paused, played by entry animation onComplete
+//     });
+
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     // --- Main Scroll-Triggered Animation Timeline ---
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500', // Extend the scroll distance for animation
+//         scrub: 1, // Smoothly link animation to scroll position
+//         pin: true, // Pin the hero section during animation
+//         onEnter: () => {
+//           if (initialLogoRotationTweenRef.current) {
+//             initialLogoRotationTweenRef.current.pause(); // Pause initial rotation when entering scroll trigger
+//           }
+//           // NEW: Pause pulse when entering scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.pause();
+//           }
+//         },
+//         onLeave: () => {
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.play(); // Play final rotation when leaving scroll trigger
+//           }
+//           // NEW: Resume pulse when leaving scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//           }
+//         },
+//         onEnterBack: () => {
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.pause(); // Pause final rotation when scrolling back into trigger
+//           }
+//           // NEW: Pause pulse when re-entering scroll trigger
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.pause();
+//           }
+//         },
+//         onLeaveBack: () => {
+//           if (initialLogoRotationTweenRef.current) {
+//             initialLogoRotationTweenRef.current.play(); // Resume initial rotation when scrolling back out
+//           }
+//           if (finalLogoRotationTweenRef.current) {
+//             finalLogoRotationTweenRef.current.kill(); // Kill final rotation if we scroll back to top
+//             finalLogoRotationTweenRef.current = null;
+//           }
+//           // NEW: Resume pulse when leaving scroll trigger backwards
+//           if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//           }
+//         },
+//       },
+//     });
+
+//     // --- Animations within the scroll-triggered timeline ---
+//     // Logo stops rotating and blur fades out
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0, // Stop rotation
+//         duration: 0.8, // Slightly longer duration for smoother stop
+//         ease: 'power2.out',
+//       },
+//       0
+//     ) // Start at the beginning of the timeline
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)', // Unblur
+//           opacity: 0, // Fade out
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       ) // Start at the beginning of the timeline
+//       // Lines appear
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0, // Slower fade in for lines
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       ); // Start slightly after logo/blur animation begins
+
+//     // --- GRAVITATIONAL PULL ANIMATION ADDITION ---
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       const currentSubCompanySize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_SIZE;
+//       const offset = currentSubCompanySize / 2;
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+//     // --- END GRAVITATIONAL PULL ANIMATION ADDITION ---
+
+
+//     // --- Final Continuous Logo Rotation (starts after scroll animation ends) ---
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360', // Continue from current rotation
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause(); // Start paused
+
+//     // --- Scroll to Top Button Animation ---
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         // end: 'bottom 100%',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     // --- Important: Re-enable scroll after animations or if not pinned
+//     // This helps avoid scroll issues if pin/animations are not active
+//     // For this specific setup, pin: true handles the scroll behavior during the animation.
+//     // This is more for general best practice or if you had issues with scroll being disabled.
+//     // document.body.style.overflow = 'auto'; // Re-enable scroll
+
+
+//     ScrollTrigger.refresh(); // Recalculate all ScrollTrigger positions
+
+//     // --- Cleanup function for the main animations useEffect ---
+//     return () => {
+//       tl.kill(); // Kill the main timeline
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) { // NEW: Kill pulse tween on unmount
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]); // Re-run if radius or container dimensions change
+
+//   return (
+//     <>
+//       {/* Main Page Content - always visible */}
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         {/* This Box now serves as the solid dark background for the entire page */}
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%), /* Bright White */
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),   /* Vibrant Magenta */
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),   /* Vibrant Cyan */
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)    /* Vibrant Yellow */
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         {/* Text elements - now outside HeroContainer, scroll naturally */}
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' }, // Moved up slightly
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             {/* Logo and Blur Background - their animation is now managed by the entryAnimationTl */}
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6" // Dashed line effect
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanySize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_SIZE;
+//                 const offset = currentSubCompanySize / 2;
+
+//                 return (
+//                   // --- UPDATED: Peripheral Link rendering to use an image ---
+//                   <Link
+//                     key={i}
+//                     component={RouterLink}
+//                     to={SUB_COMPANIES[i].to}
+//                     target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                     sx={{
+//                       position: 'absolute',
+//                       width: currentSubCompanySize,
+//                       height: currentSubCompanySize,
+//                       borderRadius: '50%', // Changed to 50% for perfect circles
+//                       background: '#202B33', // Maintain background color for the circle
+//                       display: 'flex',
+//                       alignItems: 'center',
+//                       justifyContent: 'center',
+//                       boxSizing: 'border-box',
+//                       boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+//                       cursor: 'pointer',
+//                       border: `2px solid #394B59`,
+//                       transition: 'background 0.3s, box-shadow 0.3s, border 0.3s', // Removed 'color'
+//                       zIndex: 2,
+//                       left: pos.x - offset,
+//                       top: pos.y - offset,
+//                       textDecoration: 'none',
+//                       opacity: 0,
+//                       transform: 'translateY(20px)',
+//                       // Removed text-specific styles (color, font-size, text-align, padding)
+//                       '&:hover': {
+//                         background: '#30404D',
+//                         borderColor: '#48AFF0',
+//                         boxShadow: '0 4px 24px rgba(72, 175, 240, 0.4)',
+//                       },
+//                     }}
+//                   >
+//                     <img
+//                       src={SUB_COMPANIES[i].image}
+//                       alt={SUB_COMPANIES[i].label + ' Logo'}
+//                       style={{
+//                         maxWidth: '90%', // Increased size to fill more of the circle
+//                         maxHeight: '90%', // Increased size to fill more of the circle
+//                         objectFit: 'contain', // Scales the image to fit without cropping
+//                         borderRadius: '50%', // Optional: if logos are square, makes them circular within the container
+//                         padding: '5%', // Small padding to ensure logo doesn't touch the very edge
+//                         boxSizing: 'border-box',
+//                       }}
+//                     />
+//                   </Link>
+//                   // --- END UPDATED Link rendering ---
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         {/* Scroll to top button */}
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30, // Adjusted width
+//             height: 30, // Adjusted height
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0, // Initially hidden, controlled by ScrollTrigger
+//             pointerEvents: 'none', // Initially no pointer events, controlled by ScrollTrigger
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme } from '@mui/material';
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png'; // Adjusted path as per your folder structure if 'Peptides' is a separate project
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true,
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true,
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         onUpdate: (self) => {
+//             if (self.isActive || self.progress > 0) {
+//                 if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//                 if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//             } else {
+//                 if (self.direction === 1) {
+//                     if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//                 } else {
+//                     if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//                 }
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.play();
+//             }
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Link
+//                     key={i}
+//                     component={RouterLink}
+//                     to={SUB_COMPANIES[i].to}
+//                     target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                     sx={{
+//                       position: 'absolute',
+//                       width: currentSubCompanyLogoSize,
+//                       height: currentSubCompanyLogoSize,
+//                       display: 'flex',
+//                       alignItems: 'center',
+//                       justifyContent: 'center',
+//                       boxSizing: 'border-box',
+//                       cursor: 'pointer',
+//                       zIndex: 2,
+//                       left: pos.x - offset,
+//                       top: pos.y - offset,
+//                       textDecoration: 'none',
+//                       opacity: 0,
+//                       transform: 'translateY(20px)',
+//                       // --- Removed circle background styles ---
+//                       // Removed borderRadius, background, backdropFilter, border, boxShadow from here
+
+//                       // --- New Hover Effect for Logos ---
+//                       '& img': { // Target the image inside the Link
+//                         transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                         filter: 'grayscale(0%) brightness(100%)', // Initial state
+//                         boxShadow: 'none', // Initial shadow
+//                         borderRadius: '50%', // Ensure no default rounding if logo is square
+//                       },
+//                       '&:hover img': {
+//                         transform: 'scale(1.1) translateY(-5px)', // Slight lift and scale
+//                         filter: 'grayscale(0%) brightness(120%)', // Make it pop more
+//                         // Shadow that applies to the visible part of the PNG
+//                         boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         // Using multiple box-shadows for a vibrant, glowing edge effect
+//                       },
+//                       // --- End New Hover Effect ---
+//                     }}
+//                   >
+//                     <img
+//                       src={SUB_COMPANIES[i].image}
+//                       alt={SUB_COMPANIES[i].label + ' Logo'}
+//                       style={{
+//                         width: '100%', // Make the image fill the container (which is now sized for the logo)
+//                         height: '100%',
+//                         objectFit: 'contain',
+//                         // Removed borderRadius: '50%' as we are not using circular containers
+//                         // Removed padding: '5%'
+//                         boxSizing: 'border-box',
+//                         // Ensure it's a PNG for proper shadow application to non-square shapes
+//                       }}
+//                     />
+//                   </Link>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+// // Code It Consulting – Expert IT services for software development, QA, DevOps & cloud solutions.
+// //  Peptides Research Labs – 12+ years of scientific excellence in research, lab services, molecular biology & education support.
+// // Helix Conferences – Curating world-class biotech, pharma & life science events that shape the future.
+// // Helix Journals – Peer-reviewed international journals in science, technology, health & agriculture.
+// // Helix E-Schroll – Digital abstract archives from global conferences in science, pharma & technology.
+// // Digigro – 10+ years of experience in digital marketing, SEO & content marketing.
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true,
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       HRepeatDelay: 2.8, // Corrected this, it was likely a typo or not intended
+//       paused: true,
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         onUpdate: (self) => {
+//             if (self.isActive || self.progress > 0) {
+//                 if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//                 if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//             } else {
+//                 if (self.direction === 1) {
+//                     if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//                 } else {
+//                     if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//                 }
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.play();
+//             }
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return ( // <--- Add this 'return' keyword here
+//                   <Tooltip title={SUB_COMPANIES[i].description} placement="top" key={i}>
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           borderRadius: '50%',
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                           boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true,
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true,
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         onUpdate: (self) => {
+//             if (self.isActive || self.progress > 0) {
+//                 if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//                 if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//             } else {
+//                 if (self.direction === 1) {
+//                     if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//                 } else {
+//                     if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//                 }
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.play();
+//             }
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           borderRadius: '50%',
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                           boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material';
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png';
+// import { gsap } from 'gsap'; // Corrected this line: removed '=>'
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+// import Zoom from '@mui/material/Zoom';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180;
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' },
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' },
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true,
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true,
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         onUpdate: (self: ScrollTrigger) => { // Added type annotation for 'self'
+//             if (self.isActive || self.progress > 0) {
+//                 if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//                 if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//             } else {
+//                 if (self.direction === 1) {
+//                     if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//                 } else {
+//                     if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//                 }
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.play();
+//             }
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2;
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     TransitionComponent={Zoom}
+//                     TransitionProps={{ timeout: 300 }}
+//                     componentsProps={{
+//                       tooltip: {
+//                         sx: {
+//                           fontSize: '1rem',
+//                           padding: '8px 12px',
+//                           maxWidth: '250px',
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           borderRadius: '50%',
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                           boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true,
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true,
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         onUpdate: (self) => {
+//             if (self.isActive || self.progress > 0) {
+//                 if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//                 if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//             } else {
+//                 if (self.direction === 1) {
+//                     if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//                 } else {
+//                     if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//                 }
+//                 if (logoPulseTweenRef.current) logoPulseTweenRef.current.play();
+//             }
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                             borderRadius:'10px',
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         // --- ADDED/MODIFIED FOR WHITE CIRCLE BACKGROUND ---
+//                         background: 'white', // White circular background for the link container
+//                         borderRadius: '50%', // Ensure the container is perfectly circular
+//                         padding: '12px', // Adjust padding as needed to control logo size within the circle
+//                         // --- END ADDED/MODIFIED ---
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                         //   borderRadius: '50%', // REMOVED: container now handles circular shape
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                         //   boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                           borderRadius:'10%',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.5
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Ensure tweens are killed before re-creating them to prevent duplicates
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation or onLeaveBack
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true, // Start paused, played by entry animation or onLeave/onLeaveBack
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         // When entering the scroll trigger area (scrolling down)
+//         onEnter: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling down past it)
+//         onLeave: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes after scroll animation
+//         },
+//         // When entering the scroll trigger area (scrolling up into it)
+//         onEnterBack: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling up past it, back to top)
+//         onLeaveBack: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes at top
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     // Initial play for final rotation, but it's paused until onLeave
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                           borderRadius:'10px',
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         // --- ADDED/MODIFIED FOR WHITE CIRCLE BACKGROUND ---
+//                         background: 'white', // White circular background for the link container
+//                         borderRadius: '50%', // Ensure the container is perfectly circular
+//                         padding: '12px', // Adjust padding as needed to control logo size within the circle
+//                         // --- END ADDED/MODIFIED ---
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           // borderRadius: '50%', // REMOVED: container now handles circular shape
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                         //   boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                           borderRadius:'10%',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.4 // Adjusted for mobile to bring circles closer
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Ensure tweens are killed before re-creating them to prevent duplicates
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation or onLeaveBack
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true, // Start paused, played by entry animation or onLeave/onLeaveBack
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         // When entering the scroll trigger area (scrolling down)
+//         onEnter: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling down past it)
+//         onLeave: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes after scroll animation
+//         },
+//         // When entering the scroll trigger area (scrolling up into it)
+//         onEnterBack: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling up past it, back to top)
+//         onLeaveBack: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes at top
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     // Initial play for final rotation, but it's paused until onLeave
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                           borderRadius:'10px',
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         // --- ADDED/MODIFIED FOR WHITE CIRCLE BACKGROUND ---
+//                         background: 'white', // White circular background for the link container
+//                         borderRadius: '50%', // Ensure the container is perfectly circular
+//                         padding: '12px', // Adjust padding as needed to control logo size within the circle
+//                         // --- END ADDED/MODIFIED ---
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           // borderRadius: '50%', // REMOVED: container now handles circular shape
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                           boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                           borderRadius:'10%',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- UPDATED: Increased BASE_SUB_COMPANY_SIZE for larger peripheral logos ---
+// // This now directly determines the size of the *logo image itself*
+// const BASE_SUB_COMPANY_LOGO_SIZE = 180; // Changed name for clarity
+// // --- END UPDATED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: '[https://helixconferences.com/](https://helixconferences.com/)', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: '[https://codeitconsulting.co.in/](https://codeitconsulting.co.in/)', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: '[https://peptides.co.in/](https://peptides.co.in/)', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.4 // Adjusted for mobile to bring circles closer
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 0.8
+//     : BASE_HEX_RADIUS;
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Ensure tweens are killed before re-creating them to prevent duplicates
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation or onLeaveBack
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true, // Start paused, played by entry animation or onLeave/onLeaveBack
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         // When entering the scroll trigger area (scrolling down)
+//         onEnter: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling down past it)
+//         onLeave: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes after scroll animation
+//         },
+//         // When entering the scroll trigger area (scrolling up into it)
+//         onEnterBack: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling up past it, back to top)
+//         onLeaveBack: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes at top
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // Use BASE_SUB_COMPANY_LOGO_SIZE directly for the logo width/height
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 :
+//                                          theme.breakpoints.down('md') ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8 :
+//                                          BASE_SUB_COMPANY_LOGO_SIZE;
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     // Initial play for final rotation, but it's paused until onLeave
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             maxWidth: { xs: '100%', md: 700, lg: 900 },
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//                   : BASE_SUB_COMPANY_LOGO_SIZE;
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                           borderRadius:'10px',
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         // --- ADDED/MODIFIED FOR WHITE CIRCLE BACKGROUND ---
+//                         background: 'white', // White circular background for the link container
+//                         borderRadius: '50%', // Ensure the container is perfectly circular
+//                         padding: '12px', // Adjust padding as needed to control logo size within the circle
+//                         // --- END ADDED/MODIFIED ---
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           // borderRadius: '50%', // REMOVED: container now handles circular shape
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                           boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                           borderRadius:'10%',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useRef, useState } from 'react';
+// import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
+// import { styled } from '@mui/material/styles';
+// import { Link as RouterLink } from 'react-router-dom';
+// import Link from '@mui/material/Link';
+// import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+// // --- NEW IMPORTS: Import your individual peripheral logos ---
+// // IMPORTANT: Adjust these paths and filenames to match your actual logo files
+// import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+// import codeitLogo from '../assets/images/codeit-logo.png';
+// import peptidesLogo from '../assets/images/peptides-logo.png';
+// import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+// import helixESchrollLogo from '../assets/images/helix-e-schroll-logo.png';
+// import digigroLogo from '../assets/images/digigro-logo.png';
+// // --- END NEW IMPORTS ---
+
+// // Register ScrollTrigger plugin
+// gsap.registerPlugin(ScrollTrigger);
+
+// const HERO_TEXT = '#F5F8FA';
+
+// // Define base sizes and radii
+// const BASE_HEX_RADIUS = 380;
+// const BASE_BLUR_BG_SIZE = 450;
+// const BASE_LOGO_SIZE = 300;
+
+// // --- ADJUSTED: BASE_SUB_COMPANY_LOGO_SIZE for better mobile scaling and desktop increase ---
+// // This now directly determines the largest size for desktop, and scales down for mobile
+// const BASE_SUB_COMPANY_LOGO_SIZE = 250; // Increased base size for larger desktop logos
+// // --- END ADJUSTED BASE_SUB_COMPANY_SIZE ---
+
+// const SUB_COMPANIES = [
+//   { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+//   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+//   { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+//   { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixESchrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+// ];
+
+// const StyledBlurBackground = styled(Box)(({ theme }) => ({
+//   position: 'absolute',
+//   width: BASE_BLUR_BG_SIZE,
+//   height: BASE_BLUR_BG_SIZE,
+//   borderRadius: '20%',
+//   background: 'rgba(255, 255, 255, 0.18)',
+//   zIndex: 1,
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   filter: 'blur(10px)',
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.8,
+//     height: BASE_BLUR_BG_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_BLUR_BG_SIZE * 0.6,
+//     height: BASE_BLUR_BG_SIZE * 0.6,
+//   },
+// }));
+
+// const CenterLogo = styled('img')(({ theme }) => ({
+//   width: BASE_LOGO_SIZE,
+//   height: BASE_LOGO_SIZE,
+//   borderRadius: '20%',
+//   zIndex: 2,
+//   position: 'absolute',
+//   left: '50%',
+//   top: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   opacity: 1,
+//   [theme.breakpoints.down('md')]: {
+//     width: BASE_LOGO_SIZE * 0.8,
+//     height: BASE_LOGO_SIZE * 0.8,
+//   },
+//   [theme.breakpoints.down('sm')]: {
+//     width: BASE_LOGO_SIZE * 0.6,
+//     height: BASE_LOGO_SIZE * 0.6,
+//   },
+// }));
+
+// const HeroContainer = styled(Box)(() => ({
+//   position: 'relative',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   background: 'transparent',
+//   flexDirection: 'column',
+//   overflow: 'hidden',
+//   paddingTop: '0vh',
+// }));
+
+// const LinesSVG = styled('svg')({
+//   position: 'absolute',
+//   left: 0,
+//   top: 0,
+//   width: '100%',
+//   height: '100%',
+//   zIndex: 1,
+//   pointerEvents: 'none',
+//   opacity: 0,
+// });
+
+// const HomePage: React.FC = () => {
+//   const theme = useTheme();
+//   const heroRef = useRef<HTMLDivElement | null>(null);
+//   const logoRef = useRef<HTMLImageElement | null>(null);
+//   const blurBgRef = useRef<HTMLDivElement | null>(null);
+//   const peripheralLinksContainerRef = useRef<HTMLDivElement | null>(null);
+//   const linesSvgRef = useRef<SVGSVGElement | null>(null);
+//   const scrollToTopButtonRef = useRef<HTMLButtonElement | null>(null);
+
+//   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+
+//   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
+//   const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
+
+//   // --- UPDATED: currentRadius for distance based on device width ---
+//   const currentRadius = theme.breakpoints.down('sm')
+//     ? BASE_HEX_RADIUS * 0.6 // Increased distance for mobile
+//     : theme.breakpoints.down('md')
+//     ? BASE_HEX_RADIUS * 1.1 // Increased for tablet
+//     : BASE_HEX_RADIUS * 2.2; // Significantly increased for larger desktop screens
+//   // --- END UPDATED currentRadius ---
+
+//   useEffect(() => {
+//     const scrollToTop = () => {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+//       ScrollTrigger.refresh(true);
+//     };
+
+//     scrollToTop();
+
+//     const updateDimensions = () => {
+//       if (heroRef.current) {
+//         setContainerDimensions({
+//           width: heroRef.current.offsetWidth,
+//           height: heroRef.current.offsetHeight,
+//         });
+//       }
+//     };
+
+//     updateDimensions();
+//     window.addEventListener('resize', updateDimensions);
+
+//     const handleBeforeUnload = () => {
+//         window.scrollTo(0, 0);
+//     };
+//     window.addEventListener('beforeunload', handleBeforeUnload);
+
+//     return () => {
+//       window.removeEventListener('resize', updateDimensions);
+//       window.removeEventListener('beforeunload', handleBeforeUnload);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!logoRef.current || !blurBgRef.current) {
+//       return;
+//     }
+
+//     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
+//     gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
+
+//     const entryAnimationTl = gsap.timeline({
+//       onComplete: () => {
+//         if (initialLogoRotationTweenRef.current) {
+//           initialLogoRotationTweenRef.current.play();
+//         }
+//         if (logoPulseTweenRef.current) {
+//             logoPulseTweenRef.current.play();
+//         }
+//       },
+//     });
+
+//     entryAnimationTl
+//       .to([blurBgRef.current, logoRef.current], {
+//         opacity: 1,
+//         scale: 1,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       })
+//       .to(logoRef.current, {
+//         rotate: -720,
+//         duration: 1.5,
+//         ease: 'power3.inOut',
+//       }, ">-0.4");
+
+//     return () => {
+//       entryAnimationTl.kill();
+//     };
+//   }, []);
+
+//   const center = {
+//     x: containerDimensions.width / 2,
+//     y: containerDimensions.height / 2,
+//   };
+
+//   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
+//   const finalPositions = SUB_COMPANIES.map((_, i) => {
+//     return {
+//       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
+//       y: center.y + currentRadius * Math.sin(i * angleStep - Math.PI / 2),
+//     };
+//   });
+
+//   useEffect(() => {
+//     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+//     // Ensure tweens are killed before re-creating them to prevent duplicates
+//     if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//         initialLogoRotationTweenRef.current = null;
+//     }
+//     if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//         finalLogoRotationTweenRef.current = null;
+//     }
+//     if (logoPulseTweenRef.current) {
+//         logoPulseTweenRef.current.kill();
+//         logoPulseTweenRef.current = null;
+//     }
+
+//     if (
+//       !heroRef.current ||
+//       !logoRef.current ||
+//       !blurBgRef.current ||
+//       !peripheralLinksContainerRef.current ||
+//       !linesSvgRef.current ||
+//       !scrollToTopButtonRef.current
+//     ) {
+//       return;
+//     }
+
+//     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//       paused: true, // Start paused, played by entry animation or onLeaveBack
+//     });
+
+//     logoPulseTweenRef.current = gsap.to(logoRef.current, {
+//       scale: 1.05,
+//       duration: 0.2,
+//       yoyo: true,
+//       repeat: -1,
+//       ease: "power1.inOut",
+//       delay: 0.5,
+//       repeatDelay: 2.8,
+//       paused: true, // Start paused, played by entry animation or onLeave/onLeaveBack
+//     });
+
+//     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
+
+//     const tl = gsap.timeline({
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'center center',
+//         end: '+=2500',
+//         scrub: 1,
+//         pin: true,
+//         // When entering the scroll trigger area (scrolling down)
+//         onEnter: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling down past it)
+//         onLeave: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes after scroll animation
+//         },
+//         // When entering the scroll trigger area (scrolling up into it)
+//         onEnterBack: () => {
+//             if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
+//         },
+//         // When leaving the scroll trigger area (scrolling up past it, back to top)
+//         onLeaveBack: () => {
+//             if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+//             if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes at top
+//         },
+//       },
+//     });
+
+//     tl.to(
+//       logoRef.current,
+//       {
+//         rotate: 0,
+//         duration: 0.8,
+//         ease: 'power2.out',
+//       },
+//       0
+//     )
+//       .to(
+//         blurBgRef.current,
+//         {
+//           filter: 'blur(0px)',
+//           opacity: 0,
+//           duration: 0.8,
+//           ease: 'power2.out',
+//         },
+//         0
+//       )
+//       .to(
+//         linesSvgRef.current,
+//         {
+//           opacity: 1,
+//           duration: 1.0,
+//           ease: 'power1.inOut',
+//         },
+//         0.3
+//       );
+
+//     subCompanyElements.forEach((el, i) => {
+//       const finalPos = finalPositions[i];
+//       // --- UPDATED: currentSubCompanyLogoSize for size based on device width ---
+//       const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//         ? BASE_SUB_COMPANY_LOGO_SIZE * 0.4 // Further decreased size for mobile
+//         : theme.breakpoints.down('md')
+//         ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+//         : BASE_SUB_COMPANY_LOGO_SIZE * 1.0; // Using BASE_SUB_COMPANY_LOGO_SIZE directly for desktop
+//       // --- END UPDATED currentSubCompanyLogoSize ---
+
+//       const offset = currentSubCompanyLogoSize / 2; // Offset for centering
+
+//       const startDistanceMultiplier = 2.0;
+//       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
+//       const startY = center.y + (currentRadius * startDistanceMultiplier) * Math.sin(i * angleStep - Math.PI / 2);
+
+//       gsap.set(el as HTMLElement, {
+//         opacity: 0,
+//         scale: 0.5,
+//         x: startX - (finalPos.x - offset),
+//         y: startY - (finalPos.y - offset),
+//       });
+//     });
+
+//     tl.to(
+//       subCompanyElements,
+//       {
+//         opacity: 1,
+//         scale: 1,
+//         x: 0,
+//         y: 0,
+//         stagger: 0.08,
+//         duration: 1.5,
+//         ease: 'back.out(1.7)',
+//       },
+//       '>-0.5'
+//     );
+
+//     // Initial play for final rotation, but it's paused until onLeave
+//     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
+//       rotate: '+=360',
+//       duration: 15,
+//       ease: 'none',
+//       repeat: -1,
+//     }).pause();
+
+
+//     gsap.to(scrollToTopButtonRef.current, {
+//       opacity: 1,
+//       pointerEvents: 'auto',
+//       scrollTrigger: {
+//         trigger: heroRef.current,
+//         start: 'top top',
+//         toggleActions: 'play none none reverse',
+//       },
+//     });
+
+//     ScrollTrigger.refresh();
+
+//     return () => {
+//       tl.kill();
+//       if (initialLogoRotationTweenRef.current) {
+//         initialLogoRotationTweenRef.current.kill();
+//       }
+//       if (finalLogoRotationTweenRef.current) {
+//         finalLogoRotationTweenRef.current.kill();
+//       }
+//       if (logoPulseTweenRef.current) {
+//           logoPulseTweenRef.current.kill();
+//       }
+//       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+//     };
+//   }, [currentRadius, containerDimensions]);
+
+//   return (
+//     <>
+//       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
+//         <Box
+//           sx={{
+//             position: 'fixed',
+//             top: 0,
+//             left: 0,
+//             width: '100vw',
+//             height: '100vh',
+//             minHeight: '100vh',
+//             zIndex: -1,
+//             background: '#0A0A0A',
+//             backgroundImage: `
+//             radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+//             radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
+//           `,
+//             filter: 'none',
+//             borderRadius: '0',
+//             pointerEvents: 'none',
+//           }}
+//         />
+
+//         <Typography
+//           variant="h2"
+//           sx={{
+//             color: HERO_TEXT,
+//             fontWeight: 800,
+//             letterSpacing: 2,
+//             textShadow: '0 2px 12px #000',
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
+//             mt: { xs: '60px', sm: '80px', md: '80px' },
+//             px: 2,
+//           }}
+//         >
+//           Welcome to Helix Synergy Corp
+//         </Typography>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             color: '#A7B6C2',
+//             fontWeight: 400,
+//             letterSpacing: 1,
+//             zIndex: 3,
+//             textAlign: 'center',
+//             fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+//             mt: 2,
+//             mb: 8,
+//             px: 2,
+//           }}
+//         >
+//           Innovative Synergy Solutions for a Connected World
+//         </Typography>
+
+//         <HeroContainer
+//           ref={heroRef}
+//           sx={{
+//             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
+//             width: '100%',
+//             // --- UPDATED: maxWidth for HeroContainer to allow more spread on desktop ---
+//             maxWidth: { xs: '100%', md: 900, lg: 1200 },
+//             // --- END UPDATED maxWidth ---
+//             margin: '0 auto',
+//             position: 'relative',
+//           }}
+//         >
+//           <Box
+//             sx={{
+//               width: '100%',
+//               height: '100%',
+//               position: 'relative',
+//               maxWidth: '100%',
+//               overflow: 'hidden',
+//             }}
+//           >
+//             <StyledBlurBackground ref={blurBgRef} />
+//             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
+
+//             <LinesSVG ref={linesSvgRef} width={containerDimensions.width} height={containerDimensions.height}>
+//               {finalPositions.map((pos, i) => (
+//                 <line
+//                   key={i}
+//                   x1={center.x}
+//                   y1={center.y}
+//                   x2={pos.x}
+//                   y2={pos.y}
+//                   stroke="#394B59"
+//                   strokeWidth={3}
+//                   strokeDasharray="8 6"
+//                 />
+//               ))}
+//             </LinesSVG>
+//             <Box ref={peripheralLinksContainerRef}>
+//               {finalPositions.map((pos, i) => {
+//                 const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 0.6 // Further decreased size for mobile
+//                   : theme.breakpoints.down('md')
+//                   ? BASE_SUB_COMPANY_LOGO_SIZE * 1
+//                   : BASE_SUB_COMPANY_LOGO_SIZE * 1.5; // Using BASE_SUB_COMPANY_LOGO_SIZE directly for desktop
+//                 const offset = currentSubCompanyLogoSize / 2;
+
+//                 return (
+//                   <Tooltip
+//                     title={SUB_COMPANIES[i].description}
+//                     placement="top"
+//                     key={i}
+//                     componentsProps={{ // Add this prop to style the tooltip popup
+//                       tooltip: {
+//                         sx: {
+//                           borderRadius:'10px',
+//                           fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+//                           padding: '8px 12px', // You can also adjust padding for better appearance
+//                           maxWidth: '250px', // Optional: limit tooltip width for better readability
+//                         },
+//                       },
+//                     }}
+//                   >
+//                     <Link
+//                       component={RouterLink}
+//                       to={SUB_COMPANIES[i].to}
+//                       target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+//                       sx={{
+//                         position: 'absolute',
+//                         width: currentSubCompanyLogoSize,
+//                         height: currentSubCompanyLogoSize,
+//                         display: 'flex',
+//                         alignItems: 'center',
+//                         justifyContent: 'center',
+//                         boxSizing: 'border-box',
+//                         cursor: 'pointer',
+//                         zIndex: 2,
+//                         left: pos.x - offset,
+//                         top: pos.y - offset,
+//                         textDecoration: 'none',
+//                         opacity: 0,
+//                         transform: 'translateY(20px)',
+//                         background: 'white', // White circular background for the link container
+//                         borderRadius: '50%', // Reverted to circular
+//                         padding: '12px', // Adjust padding as needed to control logo size within the circle
+//                         '& img': {
+//                           transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+//                           filter: 'grayscale(0%) brightness(100%)',
+//                           boxShadow: 'none',
+//                           borderRadius:'10%', // Maintain some border radius on the image itself
+//                         },
+//                         '&:hover img': {
+//                           transform: 'scale(1.1) translateY(-5px)',
+//                           filter: 'grayscale(0%) brightness(120%)',
+//                         //   boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+//                         },
+//                       }}
+//                     >
+//                       <img
+//                         src={SUB_COMPANIES[i].image}
+//                         alt={SUB_COMPANIES[i].label + ' Logo'}
+//                         style={{
+//                           width: '100%',
+//                           height: '100%',
+//                           objectFit: 'contain',
+//                           boxSizing: 'border-box',
+//                           borderRadius:'10%',
+//                         }}
+//                       />
+//                     </Link>
+//                   </Tooltip>
+//                 );
+//               })}
+//             </Box>
+//           </Box>
+//         </HeroContainer>
+
+//         <Button
+//           ref={scrollToTopButtonRef}
+//           variant="contained"
+//           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+//           sx={{
+//             position: 'fixed',
+//             bottom: 70,
+//             right: 20,
+//             zIndex: 100000,
+//             backgroundColor: 'rgba(255, 255, 255, 0.23)',
+//             '&:hover': {
+//               backgroundColor: 'rgba(181, 181, 181, 0.41)',
+//             },
+//             borderRadius: '50%',
+//             width: 30,
+//             height: 30,
+//             minWidth: 0,
+//             padding: 0,
+//             opacity: 0,
+//             pointerEvents: 'none',
+//             transition: 'opacity 0.3s ease-in-out',
+//           }}
+//           className="scroll-to-top-button"
+//         >
+//           <ArrowUpwardIcon sx={{ color: 'white', fontSize: '1.2rem' }} />
+//         </Button>
+//       </Box>
+//     </>
+//   );
+// };
+
+// export default HomePage;
+
+
+
+
+
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Typography, Button, useTheme } from '@mui/material';
+import { Box, Typography, Button, useTheme, Tooltip } from '@mui/material'; // Added Tooltip import
 import { styled } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
-import logo from '../assets/logo/my-logo.png'; // Assuming your logo path is correct
+import logo from '../assets/logo/my-logo.png'; // Assuming your main logo path is correct
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+// --- NEW IMPORTS: Import your individual peripheral logos ---
+// IMPORTANT: Adjust these paths and filenames to match your actual logo files
+import helixConferencesLogo from '../assets/images/helix-conferences-logo.png';
+import codeitLogo from '../assets/images/codeit-logo.png';
+import peptidesLogo from '../assets/images/peptides-logo.png';
+import helixJournalsLogo from '../assets/images/helix-journals-logo.png';
+import helixEscrollLogo from '../assets/images/helix-e-scroll-logo.png';
+import digigroLogo from '../assets/images/digigro-logo.png';
+// --- END NEW IMPORTS ---
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -8048,33 +14682,38 @@ gsap.registerPlugin(ScrollTrigger);
 const HERO_TEXT = '#F5F8FA';
 
 // Define base sizes and radii
-const BASE_HEX_RADIUS = 380; // Increased base radius for larger spread
-const BASE_BLUR_BG_SIZE = 450; // Increased size for the main logo blur background
-const BASE_LOGO_SIZE = 300; // Increased logo size
-const BASE_SUB_COMPANY_SIZE = 160; // Increased size for sub-company circles
-const BASE_SUB_COMPANY_FONT_SIZE = '1.3rem'; // Adjusted font size for larger circles
+const BASE_HEX_RADIUS = 380;
+const BASE_BLUR_BG_SIZE = 450;
+const BASE_LOGO_SIZE = 300;
+
+// --- ADJUSTED: BASE_SUB_COMPANY_LOGO_SIZE for better mobile scaling and desktop increase ---
+// This now directly determines the largest size for desktop, and scales down for mobile
+const BASE_SUB_COMPANY_LOGO_SIZE = 250; // Increased base size for larger desktop logos
+// --- END ADJUSTED BASE_SUB_COMPANY_SIZE ---
 
 const SUB_COMPANIES = [
-  { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/' },
-  { label: 'CODEIT', to: 'https://codeitconsulting.co.in/' },
-  { label: 'PEPTIDES', to: 'https://peptides.co.in/' },
-  { label: 'HELIX JOURNALS', to: '/helix-journals' },
-  { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll' },
-  { label: 'DIGIGRO', to: '/digigro' },
+  { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
+  { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
+  { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
+  { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+//   { label: 'HELIX E-scroll', to: '/helix-e-scroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
+//   { label: 'DIGIGRO', to: '/digigro', image: helixEscrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
+{ label: 'HELIX E-scroll', to: '/helix-e-scroll', image: helixEscrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' },
+  { label: 'DIGIGRO', to: '/digigro', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' },
 ];
 
 const StyledBlurBackground = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: BASE_BLUR_BG_SIZE,
   height: BASE_BLUR_BG_SIZE,
-  borderRadius: '20%', // Modernized to 20% border radius
-  background: 'rgba(255, 255, 255, 0.18)', // Subtle white background
+  borderRadius: '20%',
+  background: 'rgba(255, 255, 255, 0.18)',
   zIndex: 1,
   left: '50%',
-  top: '50%', // Moved up slightly
+  top: '50%',
   transform: 'translate(-50%, -50%)',
-  opacity: 1, // Will be set to 0 by GSAP initially
-  filter: 'blur(10px)', // Will be unblurred by GSAP
+  opacity: 1,
+  filter: 'blur(10px)',
   [theme.breakpoints.down('md')]: {
     width: BASE_BLUR_BG_SIZE * 0.8,
     height: BASE_BLUR_BG_SIZE * 0.8,
@@ -8088,13 +14727,13 @@ const StyledBlurBackground = styled(Box)(({ theme }) => ({
 const CenterLogo = styled('img')(({ theme }) => ({
   width: BASE_LOGO_SIZE,
   height: BASE_LOGO_SIZE,
-  borderRadius: '20%', // Modernized to 20% border radius
+  borderRadius: '20%',
   zIndex: 2,
   position: 'absolute',
   left: '50%',
-  top: '50%', // Moved up slightly
-  transform: 'translate(-50%, -50%)', // Logo is centered initially
-  opacity: 1, // Will be set to 0 by GSAP initially
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
+  opacity: 1,
   [theme.breakpoints.down('md')]: {
     width: BASE_LOGO_SIZE * 0.8,
     height: BASE_LOGO_SIZE * 0.8,
@@ -8113,8 +14752,7 @@ const HeroContainer = styled(Box)(() => ({
   background: 'transparent',
   flexDirection: 'column',
   overflow: 'hidden',
-  // Adjusted padding-top to pull content up within the pinned area
-  paddingTop: '0vh', // Adjust as needed, was '10vh' implicitly
+  paddingTop: '0vh',
 }));
 
 const LinesSVG = styled('svg')({
@@ -8125,7 +14763,7 @@ const LinesSVG = styled('svg')({
   height: '100%',
   zIndex: 1,
   pointerEvents: 'none',
-  opacity: 0, // Initial opacity for animation
+  opacity: 0,
 });
 
 const HomePage: React.FC = () => {
@@ -8141,19 +14779,23 @@ const HomePage: React.FC = () => {
 
   const initialLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
   const finalLogoRotationTweenRef = useRef<gsap.core.Tween | null>(null);
-  const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null); // NEW: Ref for the continuous pulse
+  const logoPulseTweenRef = useRef<gsap.core.Tween | null>(null);
 
-  // Responsive values for radius based on screen size
+  // --- UPDATED: currentRadius for distance based on device width ---
   const currentRadius = theme.breakpoints.down('sm')
-    ? BASE_HEX_RADIUS * 0.5
+    ? BASE_HEX_RADIUS * 0.5 // Reduced distance for mobile (from 0.6 to 0.4)
     : theme.breakpoints.down('md')
-    ? BASE_HEX_RADIUS * 0.8
-    : BASE_HEX_RADIUS;
+    ? BASE_HEX_RADIUS * 1.0 // Increased for tablet
+    : BASE_HEX_RADIUS * 2; // Significantly increased for larger desktop screens
+  // --- END UPDATED currentRadius ---
 
-  // This useEffect handles page scroll-to-top and container dimension updates
   useEffect(() => {
-    // --- Scroll to top instantly on mount or refresh ---
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      ScrollTrigger.refresh(true);
+    };
+
+    scrollToTop();
 
     const updateDimensions = () => {
       if (heroRef.current) {
@@ -8167,31 +14809,30 @@ const HomePage: React.FC = () => {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
 
+    const handleBeforeUnload = () => {
+        window.scrollTo(0, 0);
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
       window.removeEventListener('resize', updateDimensions);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []); // Empty dependency array means it runs once on mount
+  }, []);
 
-
-  // This useEffect handles the entry animation for logo and blur background
   useEffect(() => {
     if (!logoRef.current || !blurBgRef.current) {
       return;
     }
 
-    // Ensure all previous GSAP animations on these elements are killed
     gsap.killTweensOf([logoRef.current, blurBgRef.current]);
-
-    // Initial state for the entry animation: invisible and scaled down
-    gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 }); // Ensure initial rotation is reset
+    gsap.set([blurBgRef.current, logoRef.current], { opacity: 0, scale: 0.5, rotate: 0 });
 
     const entryAnimationTl = gsap.timeline({
       onComplete: () => {
-        // Once the entry animation is complete, start the continuous clockwise rotation
         if (initialLogoRotationTweenRef.current) {
           initialLogoRotationTweenRef.current.play();
         }
-        // NEW: Start the continuous pulse animation after entry is complete
         if (logoPulseTweenRef.current) {
             logoPulseTweenRef.current.play();
         }
@@ -8199,33 +14840,29 @@ const HomePage: React.FC = () => {
     });
 
     entryAnimationTl
-      .to([blurBgRef.current, logoRef.current], { // Pop up
+      .to([blurBgRef.current, logoRef.current], {
         opacity: 1,
         scale: 1,
         duration: 0.8,
         ease: 'power2.out',
       })
-      .to(logoRef.current, { // Fast anti-clockwise rotation
-        rotate: -720, // Two full rotations anti-clockwise
+      .to(logoRef.current, {
+        rotate: -720,
         duration: 1.5,
         ease: 'power3.inOut',
-      }, ">-0.4"); // Overlap with pop-up slightly
+      }, ">-0.4");
 
-    // Cleanup for this specific entry animation
     return () => {
-      entryAnimationTl.kill(); // Kill the entry animation timeline on unmount
+      entryAnimationTl.kill();
     };
-  }, []); // Run only once on mount (which happens on refresh/re-route)
+  }, []);
 
-
-  // Calculate center dynamically based on actual container dimensions
   const center = {
     x: containerDimensions.width / 2,
     y: containerDimensions.height / 2,
   };
 
   const angleStep = (2 * Math.PI) / SUB_COMPANIES.length;
-  // Store initial calculated positions for the peripheral elements
   const finalPositions = SUB_COMPANIES.map((_, i) => {
     return {
       x: center.x + currentRadius * Math.cos(i * angleStep - Math.PI / 2),
@@ -8233,12 +14870,10 @@ const HomePage: React.FC = () => {
     };
   });
 
-  // This useEffect handles the main page animations (scroll-triggered, continuous rotations)
   useEffect(() => {
-    // CRITICAL CLEANUP FOR REACT SPAs
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
 
-    // Kill previous instances of these specific tweens
+    // Ensure tweens are killed before re-creating them to prevent duplicates
     if (initialLogoRotationTweenRef.current) {
         initialLogoRotationTweenRef.current.kill();
         initialLogoRotationTweenRef.current = null;
@@ -8247,14 +14882,11 @@ const HomePage: React.FC = () => {
         finalLogoRotationTweenRef.current.kill();
         finalLogoRotationTweenRef.current = null;
     }
-    // NEW: Kill previous pulse tween
     if (logoPulseTweenRef.current) {
         logoPulseTweenRef.current.kill();
         logoPulseTweenRef.current = null;
     }
 
-
-    // Ensure all referenced DOM elements are available for main animations
     if (
       !heroRef.current ||
       !logoRef.current ||
@@ -8266,120 +14898,97 @@ const HomePage: React.FC = () => {
       return;
     }
 
-    // --- Initial Continuous Logo Rotation (always active until scroll animation) ---
     initialLogoRotationTweenRef.current = gsap.to(logoRef.current, {
-      rotate: '+=360', // Add 360 degrees to current rotation for continuous spin
+      rotate: '+=360',
       duration: 15,
       ease: 'none',
       repeat: -1,
-      paused: true, // Start paused, played by entry animation
+      paused: true, // Start paused, played by entry animation or onLeaveBack
     });
 
-    // NEW: Continuous Logo Pulse/Bubbling Effect
     logoPulseTweenRef.current = gsap.to(logoRef.current, {
       scale: 1.05,
-      duration: 0.2, // Quick scale up
-      yoyo: true, // Scale up and then back down
-      repeat: -1, // Repeat indefinitely
+      duration: 0.2,
+      yoyo: true,
+      repeat: -1,
       ease: "power1.inOut",
-      delay: 0.5, // Initial delay before first pulse after entry anim completes
-      repeatDelay: 2.8, // Delay between pulses (total cycle time 0.2 + 0.2 + 2.8 = 3.2s)
-      paused: true, // Start paused, played by entry animation onComplete
+      delay: 0.5,
+      repeatDelay: 2.8,
+      paused: true, // Start paused, played by entry animation or onLeave/onLeaveBack
     });
-
 
     const subCompanyElements = gsap.utils.toArray(peripheralLinksContainerRef.current.children) as HTMLElement[];
 
-    // --- Main Scroll-Triggered Animation Timeline ---
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: heroRef.current,
         start: 'center center',
-        end: '+=2500', // Extend the scroll distance for animation
-        scrub: 1, // Smoothly link animation to scroll position
-        pin: true, // Pin the hero section during animation
+        end: '+=2500',
+        scrub: 1,
+        pin: true,
+        // When entering the scroll trigger area (scrolling down)
         onEnter: () => {
-          if (initialLogoRotationTweenRef.current) {
-            initialLogoRotationTweenRef.current.pause(); // Pause initial rotation when entering scroll trigger
-          }
-          // NEW: Pause pulse when entering scroll trigger
-          if (logoPulseTweenRef.current) {
-            logoPulseTweenRef.current.pause();
-          }
+            if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.pause();
+            if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
         },
+        // When leaving the scroll trigger area (scrolling down past it)
         onLeave: () => {
-          if (finalLogoRotationTweenRef.current) {
-            finalLogoRotationTweenRef.current.play(); // Play final rotation when leaving scroll trigger
-          }
-          // NEW: Resume pulse when leaving scroll trigger
-          if (logoPulseTweenRef.current) {
-            logoPulseTweenRef.current.play();
-          }
+            if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.play();
+            if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes after scroll animation
         },
+        // When entering the scroll trigger area (scrolling up into it)
         onEnterBack: () => {
-          if (finalLogoRotationTweenRef.current) {
-            finalLogoRotationTweenRef.current.pause(); // Pause final rotation when scrolling back into trigger
-          }
-          // NEW: Pause pulse when re-entering scroll trigger
-          if (logoPulseTweenRef.current) {
-            logoPulseTweenRef.current.pause();
-          }
+            if (finalLogoRotationTweenRef.current) finalLogoRotationTweenRef.current.pause();
+            if (logoPulseTweenRef.current) logoPulseTweenRef.current.pause();
         },
+        // When leaving the scroll trigger area (scrolling up past it, back to top)
         onLeaveBack: () => {
-          if (initialLogoRotationTweenRef.current) {
-            initialLogoRotationTweenRef.current.play(); // Resume initial rotation when scrolling back out
-          }
-          if (finalLogoRotationTweenRef.current) {
-            finalLogoRotationTweenRef.current.kill(); // Kill final rotation if we scroll back to top
-            finalLogoRotationTweenRef.current = null;
-          }
-          // NEW: Resume pulse when leaving scroll trigger backwards
-          if (logoPulseTweenRef.current) {
-            logoPulseTweenRef.current.play();
-          }
+            if (initialLogoRotationTweenRef.current) initialLogoRotationTweenRef.current.play();
+            if (logoPulseTweenRef.current) logoPulseTweenRef.current.play(); // Pulse resumes at top
         },
       },
     });
 
-    // --- Animations within the scroll-triggered timeline ---
-    // Logo stops rotating and blur fades out
     tl.to(
       logoRef.current,
       {
-        rotate: 0, // Stop rotation
-        duration: 0.8, // Slightly longer duration for smoother stop
+        rotate: 0,
+        duration: 0.8,
         ease: 'power2.out',
       },
       0
-    ) // Start at the beginning of the timeline
+    )
       .to(
         blurBgRef.current,
         {
-          filter: 'blur(0px)', // Unblur
-          opacity: 0, // Fade out
+          filter: 'blur(0px)',
+          opacity: 0,
           duration: 0.8,
           ease: 'power2.out',
         },
         0
-      ) // Start at the beginning of the timeline
-      // Lines appear
+      )
       .to(
         linesSvgRef.current,
         {
           opacity: 1,
-          duration: 1.0, // Slower fade in for lines
+          duration: 1.0,
           ease: 'power1.inOut',
         },
         0.3
-      ); // Start slightly after logo/blur animation begins
+      );
 
-    // --- GRAVITATIONAL PULL ANIMATION ADDITION ---
     subCompanyElements.forEach((el, i) => {
       const finalPos = finalPositions[i];
-      const currentSubCompanySize = theme.breakpoints.down('sm') ? BASE_SUB_COMPANY_SIZE * 0.6 :
-                                     theme.breakpoints.down('md') ? BASE_SUB_COMPANY_SIZE * 0.8 :
-                                     BASE_SUB_COMPANY_SIZE;
-      const offset = currentSubCompanySize / 2;
+      // --- UPDATED: currentSubCompanyLogoSize for size based on device width ---
+      const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+        ? BASE_SUB_COMPANY_LOGO_SIZE * 0.4 // Further decreased size for mobile
+        : theme.breakpoints.down('md')
+        ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+        : BASE_SUB_COMPANY_LOGO_SIZE * 1.0; // Using BASE_SUB_COMPANY_LOGO_SIZE directly for desktop
+      // --- END UPDATED currentSubCompanyLogoSize ---
+
+      const offset = currentSubCompanyLogoSize / 2; // Offset for centering
 
       const startDistanceMultiplier = 2.0;
       const startX = center.x + (currentRadius * startDistanceMultiplier) * Math.cos(i * angleStep - Math.PI / 2);
@@ -8406,52 +15015,46 @@ const HomePage: React.FC = () => {
       },
       '>-0.5'
     );
-    // --- END GRAVITATIONAL PULL ANIMATION ADDITION ---
 
-
-    // --- Final Continuous Logo Rotation (starts after scroll animation ends) ---
+    // Initial play for final rotation, but it's paused until onLeave
     finalLogoRotationTweenRef.current = gsap.to(logoRef.current, {
-      rotate: '+=360', // Continue from current rotation
+      rotate: '+=360',
       duration: 15,
       ease: 'none',
       repeat: -1,
-    }).pause(); // Start paused
+    }).pause();
 
-    // --- Scroll to Top Button Animation ---
+
     gsap.to(scrollToTopButtonRef.current, {
       opacity: 1,
       pointerEvents: 'auto',
       scrollTrigger: {
         trigger: heroRef.current,
         start: 'top top',
-        // end: 'bottom 100%',
         toggleActions: 'play none none reverse',
       },
     });
 
-    ScrollTrigger.refresh(); // Recalculate all ScrollTrigger positions
+    ScrollTrigger.refresh();
 
-    // --- Cleanup function for the main animations useEffect ---
     return () => {
-      tl.kill(); // Kill the main timeline
+      tl.kill();
       if (initialLogoRotationTweenRef.current) {
         initialLogoRotationTweenRef.current.kill();
       }
       if (finalLogoRotationTweenRef.current) {
         finalLogoRotationTweenRef.current.kill();
       }
-      if (logoPulseTweenRef.current) { // NEW: Kill pulse tween on unmount
+      if (logoPulseTweenRef.current) {
           logoPulseTweenRef.current.kill();
       }
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, [currentRadius, containerDimensions]); // Re-run if radius or container dimensions change
+  }, [currentRadius, containerDimensions]);
 
   return (
     <>
-      {/* Main Page Content - always visible */}
       <Box sx={{ position: 'relative', zIndex: 0, overflowX: 'hidden' }}>
-        {/* This Box now serves as the solid dark background for the entire page */}
         <Box
           sx={{
             position: 'fixed',
@@ -8463,10 +15066,10 @@ const HomePage: React.FC = () => {
             zIndex: -1,
             background: '#0A0A0A',
             backgroundImage: `
-            radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%), /* Bright White */
-            radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),   /* Vibrant Magenta */
-            radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),   /* Vibrant Cyan */
-            radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)    /* Vibrant Yellow */
+            radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 45%),
+            radial-gradient(circle at 85% 25%, rgba(255, 0, 255, 0.25) 0%, transparent 45%),
+            radial-gradient(circle at 50% 90%, rgba(0, 255, 255, 0.25) 0%, transparent 45%),
+            radial-gradient(circle at 20% 70%, rgba(255, 255, 0, 0.25) 0%, transparent 45%)
           `,
             filter: 'none',
             borderRadius: '0',
@@ -8474,7 +15077,6 @@ const HomePage: React.FC = () => {
           }}
         />
 
-        {/* Text elements - now outside HeroContainer, scroll naturally */}
         <Typography
           variant="h2"
           sx={{
@@ -8485,7 +15087,7 @@ const HomePage: React.FC = () => {
             zIndex: 3,
             textAlign: 'center',
             fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.2rem' },
-            mt: { xs: '60px', sm: '80px', md: '80px' }, // Moved up slightly
+            mt: { xs: '60px', sm: '80px', md: '80px' },
             px: 2,
           }}
         >
@@ -8514,7 +15116,9 @@ const HomePage: React.FC = () => {
             height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
             minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' },
             width: '100%',
-            maxWidth: { xs: '100%', md: 700, lg: 900 },
+            // --- UPDATED: maxWidth for HeroContainer to allow more spread on desktop ---
+            maxWidth: { xs: '100%', md: 900, lg: 1200 },
+            // --- END UPDATED maxWidth ---
             margin: '0 auto',
             position: 'relative',
           }}
@@ -8528,7 +15132,6 @@ const HomePage: React.FC = () => {
               overflow: 'hidden',
             }}
           >
-            {/* Logo and Blur Background - their animation is now managed by the entryAnimationTl */}
             <StyledBlurBackground ref={blurBgRef} />
             <CenterLogo ref={logoRef} src={logo} alt="Logo" />
 
@@ -8542,67 +15145,89 @@ const HomePage: React.FC = () => {
                   y2={pos.y}
                   stroke="#394B59"
                   strokeWidth={3}
-                  strokeDasharray="8 6" // Dashed line effect
+                  strokeDasharray="8 6"
                 />
               ))}
             </LinesSVG>
             <Box ref={peripheralLinksContainerRef}>
               {finalPositions.map((pos, i) => {
-                const currentSubCompanySize = theme.breakpoints.down('sm')
-                  ? BASE_SUB_COMPANY_SIZE * 0.6
+                const currentSubCompanyLogoSize = theme.breakpoints.down('sm')
+                  ? BASE_SUB_COMPANY_LOGO_SIZE * 0.4 // Further decreased size for mobile
                   : theme.breakpoints.down('md')
-                  ? BASE_SUB_COMPANY_SIZE * 0.8
-                  : BASE_SUB_COMPANY_SIZE;
-                const offset = currentSubCompanySize / 2;
+                  ? BASE_SUB_COMPANY_LOGO_SIZE * 0.8
+                  : BASE_SUB_COMPANY_LOGO_SIZE * 1.0; // Using BASE_SUB_COMPANY_LOGO_SIZE directly for desktop
+                const offset = currentSubCompanyLogoSize / 2;
 
                 return (
-                  <Link
+                  <Tooltip
+                    title={SUB_COMPANIES[i].description}
+                    placement="top"
                     key={i}
-                    component={RouterLink}
-                    to={SUB_COMPANIES[i].to}
-                    target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'} // Open external links in new tab
-                    sx={{
-                      position: 'absolute',
-                      width: currentSubCompanySize,
-                      height: currentSubCompanySize,
-                      borderRadius: 12, // Modernized border radius
-                      background: '#202B33',
-                      color: '#F5F8FA',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 600,
-                      fontSize: theme.breakpoints.down('sm') ? '0.9rem' : BASE_SUB_COMPANY_FONT_SIZE,
-                      textAlign: 'center',
-                      padding: '0 8px',
-                      boxSizing: 'border-box',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
-                      cursor: 'pointer',
-                      border: `2px solid #394B59`, // FIX: Changed to backticks
-                      transition: 'background 0.3s, color 0.3s, box-shadow 0.3s, border 0.3s',
-                      zIndex: 2,
-                      left: pos.x - offset,
-                      top: pos.y - offset,
-                      textDecoration: 'none',
-                      opacity: 0, // Initial opacity for GSAP animation (controlled by main timeline)
-                      transform: 'translateY(20px)', // Initial position for GSAP animation (controlled by main timeline)
-                      '&:hover': {
-                        background: '#30404D',
-                        borderColor: '#48AFF0', // Highlight border
-                        color: '#48AFF0', // Highlight text
-                        boxShadow: '0 4px 24px rgba(72, 175, 240, 0.4)', // Vibrant shadow on hover
+                    componentsProps={{ // Add this prop to style the tooltip popup
+                      tooltip: {
+                        sx: {
+                          borderRadius:'10px',
+                          fontSize: '1rem', // Adjust this value as needed, e.g., '1.2rem', '16px'
+                          padding: '8px 12px', // You can also adjust padding for better appearance
+                          maxWidth: '250px', // Optional: limit tooltip width for better readability
+                        },
                       },
                     }}
                   >
-                    {SUB_COMPANIES[i].label}
-                  </Link>
+                    <Link
+                      component={RouterLink}
+                      to={SUB_COMPANIES[i].to}
+                      target={SUB_COMPANIES[i].to.startsWith('http') ? '_blank' : '_self'}
+                      sx={{
+                        position: 'absolute',
+                        width: currentSubCompanyLogoSize,
+                        height: currentSubCompanyLogoSize,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxSizing: 'border-box',
+                        cursor: 'pointer',
+                        zIndex: 2,
+                        left: pos.x - offset,
+                        top: pos.y - offset,
+                        textDecoration: 'none',
+                        opacity: 0,
+                        transform: 'translateY(20px)',
+                        background: 'white', // White circular background for the link container
+                        borderRadius: '50%', // Reverted to circular
+                        padding: '12px', // Adjust padding as needed to control logo size within the circle
+                        '& img': {
+                          transition: 'transform 0.3s ease-out, filter 0.3s ease-out, box-shadow 0.3s ease-out',
+                          filter: 'grayscale(0%) brightness(100%)',
+                          boxShadow: 'none',
+                          borderRadius:'10%', // Maintain some border radius on the image itself
+                        },
+                        '&:hover img': {
+                          transform: 'scale(1.1) translateY(-5px)',
+                          filter: 'grayscale(0%) brightness(120%)',
+                        //   boxShadow: '0 10px 20px rgba(0, 255, 255, 0.4), 0 0 15px rgba(255, 255, 0, 0.5)',
+                        },
+                      }}
+                    >
+                      <img
+                        src={SUB_COMPANIES[i].image}
+                        alt={SUB_COMPANIES[i].label + ' Logo'}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                          boxSizing: 'border-box',
+                          borderRadius:'10%',
+                        }}
+                      />
+                    </Link>
+                  </Tooltip>
                 );
               })}
             </Box>
           </Box>
         </HeroContainer>
 
-        {/* Scroll to top button */}
         <Button
           ref={scrollToTopButtonRef}
           variant="contained"
@@ -8617,12 +15242,12 @@ const HomePage: React.FC = () => {
               backgroundColor: 'rgba(181, 181, 181, 0.41)',
             },
             borderRadius: '50%',
-            width: 30, // Adjusted width
-            height: 30, // Adjusted height
+            width: 30,
+            height: 30,
             minWidth: 0,
             padding: 0,
-            opacity: 0, // Initially hidden, controlled by ScrollTrigger
-            pointerEvents: 'none', // Initially no pointer events, controlled by ScrollTrigger
+            opacity: 0,
+            pointerEvents: 'none',
             transition: 'opacity 0.3s ease-in-out',
           }}
           className="scroll-to-top-button"
