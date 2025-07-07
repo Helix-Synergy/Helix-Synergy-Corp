@@ -7,7 +7,7 @@ const DigigroPage: React.FC = () => {
     <ComingSoonContent
       logoSrc={digigroLogo}
       title="DIGIGRO"
-      description="10+ years of experience in digital marketing, SEO & content marketing."
+      description="10+ years of experience in Digital Marketing, SEO & Content Marketing."
       comingSoonDate="24th September 2025" // You can update this date!
     />
   );

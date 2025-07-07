@@ -6,8 +6,8 @@ const HelixEScrollPage: React.FC = () => {
   return (
     <ComingSoonContent
       logoSrc={helixESchrollLogo}
-      title="Helix E-Schroll"
-      description="Digital abstract archives from global conferences in science, pharma & technology."
+      title="Helix e-Scroll"
+      description="Digital Abstract Archives from Global Conferences in Science, Pharma & Technology."
       comingSoonDate="14th August 2025" // You can update this date!
     />
   );

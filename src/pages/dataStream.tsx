@@ -581,7 +581,7 @@ const SUB_COMPANIES = [
   { label: 'CODEIT', to: 'https://codeitconsulting.co.in/' },
   { label: 'PEPTIDES', to: 'https://peptides.co.in/' },
   { label: 'HELIX JOURNALS', to: '/helix-journals' },
-  { label: 'HELIX E-SCHROLL', to: '/helix-e-schroll' },
+  { label: 'HELIX e-SCROLL', to: '/helix-e-scroll' },
   { label: 'DIGIGRO', to: '/digigro' },
 ];
 

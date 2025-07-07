@@ -14692,14 +14692,14 @@ const BASE_SUB_COMPANY_LOGO_SIZE = 250; // Increased base size for larger deskto
 // --- END ADJUSTED BASE_SUB_COMPANY_SIZE ---
 
 const SUB_COMPANIES = [
-  { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating world-class biotech, pharma & life science events that shape the future.' },
-  { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for software development, QA, DevOps & cloud solutions.' },
-  { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of scientific excellence in research, lab services, molecular biology & education support.' },
-  { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed international journals in science, technology, health & agriculture.' },
+  { label: 'HELIX CONFERENCES', to: 'https://helixconferences.com/', image: helixConferencesLogo, description: 'Curating World-class Biotech, Pharma & Life Science Events that shape the Future.' },
+  { label: 'CODEIT', to: 'https://codeitconsulting.co.in/', image: codeitLogo, description: 'Expert IT services for Software Development, QA, DevOps & Cloud solutions.' },
+  { label: 'PEPTIDES', to: 'https://peptides.co.in/', image: peptidesLogo, description: '12+ years of Scientific Excellence in Research, Lab services, Molecular Biology & Education support.' },
+  { label: 'HELIX JOURNALS', to: '/helix-journals', image: helixJournalsLogo, description: 'Peer-reviewed International Journals in Science, Technology, Health & Agriculture.' },
 //   { label: 'HELIX E-scroll', to: '/helix-e-scroll', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' }, // Corrected as per your `image_cd3941.jpg` visual order
 //   { label: 'DIGIGRO', to: '/digigro', image: helixEscrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' }, // Corrected as per your `image_cd3941.jpg` visual order
-{ label: 'HELIX E-scroll', to: '/helix-e-scroll', image: helixEscrollLogo, description: '10+ years of experience in digital marketing, SEO & content marketing.' },
-  { label: 'DIGIGRO', to: '/digigro', image: digigroLogo, description: 'Digital abstract archives from global conferences in science, pharma & technology.' },
+{ label: 'HELIX e-scroll', to: '/helix-e-scroll', image: helixEscrollLogo, description: '10+ years of experience in Digital Marketing, SEO & content marketing.' },
+  { label: 'DIGIGRO', to: '/digigro', image: digigroLogo, description: 'Digital Abstract Archives from Global Conferences in Science, Pharma & Technology.' },
 ];
 
 const StyledBlurBackground = styled(Box)(({ theme }) => ({

@@ -7,7 +7,7 @@ const HelixJournalsPage: React.FC = () => {
     <ComingSoonContent
       logoSrc={helixJournalsLogo}
       title="Helix Journals"
-      description="Peer-reviewed international journals in science, technology, health & agriculture."
+      description="Peer-reviewed International Journals in Science, Technology, Health & Agriculture."
       comingSoonDate="20th October 2025" // You can update this date!
     />
   );
